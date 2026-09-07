@@ -7,6 +7,7 @@ on:
 permissions:
   contents: write # Required for creating releases
   id-token: write # Required for npm Trusted Publishing
+  pull-requests: read # Required for checking associated PR labels
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.repository }}
@@ -17,7 +18,31 @@ env:
   NODE_VERSION: 24 # @NOTE Should match .nvmrc
 
 jobs:
+  check-publish:
+    runs-on: ubuntu-latest
+    name: Check whether to publish
+    outputs:
+      should-publish: ${{ steps.label.outputs.should-publish }}
+    steps:
+      - name: Check associated PR labels
+        id: label
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { data: pullRequests } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+            });
+            const skipPublish = pullRequests.some((pullRequest) =>
+              pullRequest.labels.some((label) => label.name === 'no-publish'),
+            );
+
+            core.setOutput('should-publish', (!skipPublish).toString());
+
   publish:
+    needs: check-publish
+    if: needs.check-publish.outputs.should-publish == 'true'
     runs-on: ubuntu-latest
     name: Publish version
     steps:
