@@ -59,7 +59,7 @@ jobs:
 
       # @NOTE Sanity check. This should be already validated
       # by PR, but this will catch any wonky action on main
-      - name: Validate package version numbers
+      - name: Validate package version number
         run: npm run publish:validate-version
 
       - name: Read VERSION
