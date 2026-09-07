@@ -76,7 +76,7 @@ export interface IEngine {
   get config(): EngineConfig;
   get gl(): WebGL2RenderingContext;
   get fileSystem(): IFileSystem;
-  get collisionSystem(): CollisionSystem; // @TODO These should probably be behind interfaces
+  get collisionSystem(): CollisionSystem;
   get audioSystem(): IAudioSystem;
   get inputSystem(): IInputSystem;
   get debugDraw(): IDebugDraw;
@@ -271,7 +271,7 @@ export class Engine implements IEngine {
     const { gl } = this;
 
     const clearColor = this.activeScene?.clearColour ?? DefaultClearColor;
-    gl.clearColor(clearColor.r / 0xFF, clearColor.g / 0xFF, clearColor.b / 0xFF, 1); // @TODO configurable lol
+    gl.clearColor(clearColor.r / 0xFF, clearColor.g / 0xFF, clearColor.b / 0xFF, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);

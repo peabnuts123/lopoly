@@ -1,6 +1,6 @@
 # TODO
 
-## Milestone: 0.1
+## Milestone: 0.1 - "Just make it exist first"
   - [x] ~~Transform hierarchy~~
   - [x] ~~`Rotation` as a type that deals with quaternions OR euler angles?~~
   - [x] ~~Rotation vectors wrap somehow~~
@@ -54,111 +54,97 @@
     - [x] ~~eslint settings.json~~
     - [x] ~~validate-versions.js needs some renames and stuff~~
     - [x] ~~package.json simplification (?) / repository property~~
-  - [ ] Review TODOs and clean up documentation / repo
+  - [x] ~~Review TODOs and clean up documentation / repo~~
     - [x] ~~Rewrite this README (move backlogs to TODO.md or something)~~
     - [x] ~~Check / redo metadata in package.json (descriptions need work)~~
-    - [ ] Read through backlogs, remove done/old stuff, assemble rough milestones / priorities
-    - [ ] Look through TODOs in the code for any more milestone stuff
+    - [x] ~~Read through backlogs, remove done/old stuff, assemble rough milestones / priorities~~
+    - [x] ~~Look through TODOs in the code for any more milestone stuff~~
   - [x] ~~Set a proper license on LoPoly~~
+  - [ ] Tidy up development example so we don't just have permanently uncommitted changes
+    - Also top-level files: promote or delete
 
-## Milestone: 0.2
+## Milestone: 0.2 - "First job after uni"
+  - [ ] Tidy up light attenuation shader code
+  - [ ] Reflection blending modes
+    - Especially with new Cubemap "blending mode" property, do the cubemap properties of `Material` et al need to be one interface like `reflection.intensity` etc
   - [ ] Update Rat Game to reference npm instead of local alias
   - [ ] Collision handling for concave geometry e.g. levels
-  - [ ] Ability to reset / stop animation
-    - [ ] Config e.g. animation looping
-  - [ ] Implement CUBICSPLINE animation
   - [ ] Allow camera to look straight down with pointAt()
   - [ ] Rewrite DebugModule
-  - [ ] Metallic reflections
+    - Dump raw WAV audio even if it's silent. Webm is screwing me.
+    - Look at calling [bsky api](https://docs.bsky.app/docs/tutorials/video) to see what is the perfect video format
+    - What if encode debug captured video directly to mp4 in-browser
+  - [ ] Ability to change scene (high pri??)
+  - [ ] Allow one-shot loading of a model e.g. `Model.fromPath()` or `GltfLoader.totallyLoadFully()` or whatever. We maybe even should just make the ModelDefinition call something odd. Technically `Model.load()` would match other resource APIs
+  - [ ] Is a material with a transparent blending mode but opaque colours depth tested … ? Check the documentation is correct. Could we just blend every pixel, does it need to just be transparent pixels?
+  - [ ] (ALREADY DONE?) Support for touch inputs? how does that work?
+  - [ ] Move InputSystem config (e.g. analog button threshold) into Engine.config
+  - [ ] Make `CollisionSystem.MaxCollisionGroups` configurable from engine config
+  - [ ] (~BUG) Creating more lights than max -> destroy initial lights -> new lights don't "come alive"
+    - [ ] Version 1: Throw an error?
+  - [ ] (ARTIFICIAL PRIORITY - work is small and public-facing) Rename / re-order params in `Matrix4.fromRotationTranslationScaleSelf()`
+  - [ ] Docs: Update code references to use `{@linkcode foo}` in favour of backticks. Use regex: /^\s*(/\*\*|\*).*`\w/
+  - [ ] Make sure all tmp values are called `tmp_<thing>_<purpose>` and are static where possible
+  - Remove debug input debug_allKnownKeyCodes
+
+## Milestone: 0.3 - "Squashinembugs"
+  - [ ] Camera should infer its aspect ratio, it shouldn't be a param
+    - [ ] ? Should Engine expose current aspect ratio / listen event?
+  - [ ] BUG: First frame all the transforms are identity
+  - [ ] Callbacks for input devices disconnecting / connecting (what do we care about?)
+  - [ ] Trigger type colliders
+  - [ ] Fog / culling
+  - [ ] Ability to reset / stop animation
+    - [ ] Config e.g. animation looping
+  - [ ] BUG?: If an Observable (e.g. Vector3) drops out of scope, can it be garbage collected? Or is it captured by the closure of the function that called `.onChange()`?
+  - [ ] BUG: I think we need to use finalizers to clean up held GL resources (e.g. vao in MeshPrimitive, buffers in MeshPrim geometry, etc.)
+  - [ ] BUG: Joint Weights (and other normalized values?) whose attributes are backed by normalized integers will overflow if the weight is set to a value >1.0, but CPU skinning will just use literal value (e.g. setting Joint Weight to 1.5 will denormalize to 0x80 as Uint8 (i.e. 0.5) but CPU geometry will compute as if weight as 2.0).
+    - We either need to know what the backing attribute is stored as in the geometry and enforce those limits, OR overwrite the attribute with component type FLOAT and always support >1 joint weights
+  - [ ] (ARTIFICIAL PRIORITY - suspected source of long-term risk / debt) I suppose we should eventually either make MeshPrimitiveGeometry specific to triangles, or more generic (e.g. gl.LINES - it won't have triangles...)
+    - We should expose some way of drawing lines (e.g. Vib Ribbon)
+  - [ ] Dogfood multiplayer input handling - I'm sure it's not quite right
+  - [ ] Still a bunch of stuff @TODO left in GltfLoader
+  - [ ] (THINK THIS GOT DONE?) MeshPrimitive geometry: We should be more careful about skin joints/weights being handled separately. For example, if one is set but not the other, the code will not handle it correctly. We should maybe collapse these types into a single type that's either set or not.
+  - [ ] Generate missing normals in the model loaders OR keep it in the mesh primitive geometry (?)
+  - [ ] BUG: Ensure min is always less than max in AABB
+  - [ ] Make example scenes use a more recommended architecture instead of being so hacky
 
 ## Backlog
 These items are roughly in priority order.
 
-  - [ ] Fog / culling
-  - [ ] Light falloff
-  - [ ] Alpha channel in vertex colors
-  - [ ] Configuration options
-    - [ ] Anti-aliasing
-    - [ ] Texture filtering
-  - [ ] Changing of scenes
-  - [ ] Skyboxes
-  - [ ] Custom shaders
-  - [ ] Animated textures
+  - Skyboxes
+  - UI ?
+  - Virtual input devices (on screen)
+  - Implement cubic spline interpolation in animation
+  - Split screen multiplayer / multiple activate cameras (gl.viewport, gl.scissor)
+  - `DrawDebug.drawWireframe()` should probably be replaced with a "wireframe" draw option. For example, joint weights are ignored, because the shader doesn't compute them.
+  - Gamepad vibration
+  - Replace `new Matrix4` with `Matrix4.identity()`
+  - BUG: Holding arrow keys still scrolls the page (Can we even fix this?)
+  - Have opinions about what file types are supported (e.g. only png/jpeg/etc). Look at file extension e.g. for model texture file dependencies, or maybe even header bytes for known MIME types.
+  - Support for 2 players 1 keyboard (etc) (basically just assign the same device to multiple players)
+  - Configuration options
+    - Anti-aliasing
+    - Texture filtering
+  - Make `@lopoly/create` for `npm create` ease of standing up new projects
+  - Alpha channel in vertex colors
+  - Animated textures
+  - Custom mappings for non-standard controllers
+  - Custom shaders
 
 ## Ideas
   - Built-in 3d primitives e.g. cube, sphere, etc.
   - Lights based on camera proximity (or is this a PolyZone feature?)
-  - A second param for `addChild()` that lets you mutate the child, or a factory function?
-    - Or a `parent` param for Node constructors for implicit local coordinates
-    - Or `addChild()` returns the param for fluent-style adding
-  - Memoize / cache values like `getVerticesWorldSpace`
-    - ~~Some kind of generic pattern for Dirty____?~~ observables.
-    - Should be more possible now that we have observables.
-    - Or potentially a specific worldMatrix-based cache
-
-
-### Not yet prioritised
-  - Test all Model properties e.g. VertexColors
-  - Lighting UBO can probably use an array lol
-  - redundantly calling `gl.bindBuffer` immediately after `createBuffer()`
-  - `DrawDebug.drawWireframe()` should probably be replaced with a shader / material option. For example, joint weights are ignored.
-  - Materials should be able to be overrides instead of replacements
-  - Storing `transform.position` gets a reference instead of a copy. Is that chill?
-  - Some kind of generic "muted" button that people can include automatically
-  - Camera should infer its aspect ratio, it shouldn't be a param
-  - Think about gamma vs linear colour encoding (e.g. doing maths with Color3 vs displaying Color3)
-  - Finish off comments in `observable.ts`
-  - Redo test for Rotation
-  - Write tests for Transform, Vector, Quaternion, Observable/Computed
-  - Implement cubic spline interpolation in animation
-  - Gamepad vibration
-  - Custom mappings for non-standard controllers
+  - Some kind of generic "muted" button that people can include automatically i.e. due to Web Audio API starting games muted (is that what this meant?)
   - Some kind of engine-native "Pause" functionality?
-  - Pointerlock: support for disable mouse acceleration
-  - Split screen multiplayer / multiple activate cameras (gl.viewport, gl.scissor)
-  - Support for 2 players 1 keyboard (etc) (basically just assign the same device to multiple players)
-  - Callbacks for input devices disconnecting / connecting (what do we care about?)
-  - Virtual input devices (on screen)
-  - [ ] `Matrix3` observable
-  - [ ] `Vector2` tests
-  - Still a bunch of stuff @TODO left in GltfLoader
-  - Dreaded ArrayBuffer / Uint8Array refactor / audit. WHAT IS THE CORRECT THING
-  - Do not import GLTF stuff outside GltfLoader
-  - Make examples reference npm instead of local package aliases
-  - BUG: Shader blending modes (or just Subtractive?) not quite interacting properly with non-transparent stuff. Subtractive = black.
-  - BUG: Holding arrow keys still scrolls the page
-  - Overhaul / tidy up Recording
-    - Dump raw WAV audio even if it's silent. Webm is screwing me.
-  - [ ] Fix errors introduced by `exactOptionalPropertyTypes` / make the project compile
-  - Trigger type colliders
-  - Ability to change scene (high pri??)
-  - Have opinions about what file types are supported (e.g. only png/jpeg/etc). Look at file extension e.g. for model texture file dependencies, or maybe even header bytes for known MIME types.
-  - Ability to ignore certain results when ray casting the scene (? if that API even got built)
-  - Replace `new Matrix4` with `Matrix4.identity()`
-  - Generate missing normals in the model loaders (instead of in the mesh primitive geometry)
-  - If an Observable (e.g. Vector3) drops out of scope, can it be garbage collected? Or is it captured by the closure of the function that called `.onChange()`?
-  - I think we need to use finalizers to clean up held GL resources (e.g. vao in MeshPrimitive, buffers in MeshPrim geometry, etc.)
-  - MeshPrimitive geometry: We should be more careful about skin joints/weights being handled separately. For example, if one is set but not the other, the code will not handle it correctly. We should maybe collapse these types into a single type that's either set or not.
-  - Make sure all tmp values are called `tmp_<thing>_<purpose>` and are static where possible
-  - BUG: Joint Weights (and other normalized values?) whose attributes are backed by normalized integers will overflow if the weight is set to a value >1.0, but CPU skinning will just literal value (e.g. setting Joint Weight to 1.5 will denormalize to 0x80 as Uint8 (i.e. 0.5) but CPU geometry will compute as if weight as 2.0).
-    - We either need to know what the backing attribute is stored as in the geometry and enforce those limits, OR overwrite the attribute with component type FLOAT and always support >1 joint weights
-  - Docs: Update code references to use `{@linkcode foo}` in favour of backticks. Use regex: /^\s*(/\*\*|\*).*`\w/
-  - I suppose we should eventually either make MeshPrimitiveGeometry specific to triangles, or more generic (e.g. gl.LINES - it won't have triangles...)
-    - We should expose some way of drawing lines (e.g. Vib Ribbon)
-  - `extents` on MeshPrimitiveGeometry should probably be observable and `approximateAabb` should be computed based on it
-  - BUG: First frame all the transforms are identity
-  - Make `@lopoly/create`
+  - Pointerlock: support for disabling mouse acceleration
+  - Enable and fix errors introduced by `exactOptionalPropertyTypes`
   - Do ... nodes ... actually need names?
-  - What is UI gonna be lol
-  - Allow one-shot loading of a model e.g. `Model.fromPath()` or `GltfLoader.totallyLoadFully()` or whatever. We maybe even should just make the ModelDefinition call something odd. Technically `Model.load()` would match other resource APIs
-  - Is a material with a transparent blending mode but opaque colours depth tested … ? Check the documentation is correct. Could we just blend every pixel, does it need to just be transparent pixels?
-  - Especially with new Cubemap "blending mode" property, do the cubemap properties of `Material` et al need to be one interface like `reflection.intensity` etc
-  - Make `CollisionSystem.MaxCollisionGroups` configurable from engine config
-  - Look at calling [bsky api](https://docs.bsky.app/docs/tutorials/video) to see what is the perfect video format
-  - What if encode debug captured video directly to mp4 in-browser
-  - Support for touch inputs? how does that work?
-  - Does `MouseButton` need to be renamed / refactored?
-  - Should InputSystem config (for e.g. analog buttons etc) live in Engine Config?
-    - Also: `CollisionSystem.MaxCollisionGroups`
-  - Dogfood multiplayer input handling - I'm sure it's not quite right
-  - (~BUG) Creating more lights than max -> destroy initial lights -> new lights don't "come alive"
+  - IDEA: Rename MouseButton to PointerButton
+  - ? IDEA: Expose functions to iterate all model parts from a model (instead of iterating hierarchy manually?)
+  - Logger class with `Debug` log level
+  - Record non-texture file dependencies in ModelDefinition
+  - Use Computed to cache `BoxColliderNode.getVerticesWorldSpace()`
+  - Use Computed to cache `CameraNode.projectionMatrix`
+  - Remove or promote `Computed.debug_name`
+  - Think about gamma vs linear colour encoding (e.g. doing maths with Color3 vs displaying Color3)

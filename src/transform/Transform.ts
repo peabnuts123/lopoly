@@ -7,7 +7,6 @@ interface TransformNodeTarget {
   get name(): string;
 }
 
-// @TODO Could lift up into `@lopoly/engine` ?
 export class Transform<T extends TransformNodeTarget> {
   private readonly _position: Vector3;
   private readonly _rotation: Rotation;
