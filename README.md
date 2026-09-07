@@ -14,7 +14,7 @@ LoPoly's capabilities are influenced by early 3D consoles such as the PS1 and th
 ### Simple
 LoPoly is a code-first engine which means you create games entirely by writing code. The API is very small and straightforward, so it's simple to get things up and running.
 
-The API has a fixed-function design based on features typically found in older games. Common features are preferred to be built-in to the engine rather than requiring every developer recreate them individually.
+The API has a fixed-function design based on features typically found in older games. Common features are preferred to be built into the engine rather than requiring every developer recreate them individually.
 
 ### Web
 LoPoly is built using WebGL, so it only targets the web. This makes games easy to make, play, and share. LoPoly is designed for indies, hobbyists, and tinkerers to make weird and wonderful things.
@@ -33,9 +33,8 @@ npm install @lopoly/engine
 
 ## Documentation
 
-See [the engine project](./src/engine/README.md) for full documentation on how to build things with LoPoly.
-
-There are also several [examples](./examples/README.md) of small games in this repository.
+- [📚 Documentation site](https://peabnuts123.github.io/lopoly/)
+- [🧱 Example projects](./examples/README.md)
 
 ### Basic usage
 
@@ -56,7 +55,7 @@ There are also several [examples](./examples/README.md) of small games in this r
 
 ```typescript
 // index.ts
-import { Color3, Vector3 } from '@lopoly/core/math';
+import { Color3, Vector3 } from '@lopoly/engine/math';
 import { Engine, WebFileSystem, GltfLoader, Model, Scene, CameraNode, DirectionalLightNode, ModelNode } from '@lopoly/engine';
 
 // Create engine attached to canvas + virtual "file system"

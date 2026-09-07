@@ -1,13 +1,7 @@
 {
   "references": [
     {
-      "path": "../../src/common",
-    },
-    {
-      "path": "../../src/core/tsconfig.build.json",
-    },
-    {
-      "path": "../../src/engine/tsconfig.build.json",
+      "path": "../../tsconfig.build.json",
     },
   ],
   "compilerOptions": {
@@ -26,9 +20,8 @@
     "paths": {
       "@game/*": ["./src/*"],
       // @NOTE These are only needed because the source is in the same repo.
-      "@lopoly/core/*": ["../../src/core/src/*"],
-      "@lopoly/common/*": ["../../src/common/*"],
-      "@lopoly/engine/*": ["../../src/engine/src/*"],
+      "@lopoly/engine": ["../../src"],
+      "@lopoly/engine/*": ["../../src/*"],
     },
 
     "strict": true,
@@ -47,5 +40,6 @@
     "vite.config.ts",
     "tailwind.config.js",
     "postcss.config.js",
+    "eslint.config.mjs",
   ],
 }

@@ -1,6 +1,6 @@
 import './style.css';
 
-import  { Vector3, Color3 } from '@lopoly/core/math';
+import  { Vector3, Color3 } from '@lopoly/engine/math';
 import  { Engine } from '@lopoly/engine/Engine';
 import  { Scene } from '@lopoly/engine/scene';
 import  { WebFileSystem } from '@lopoly/engine/filesystem/WebFileSystem';

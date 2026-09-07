@@ -8,7 +8,7 @@ env:
   NODE_VERSION: 24 # @NOTE Should match .nvmrc
 
 jobs:
-  check-pr:
+  check-src:
     runs-on: ubuntu-latest
     name: Check PR
     steps:
@@ -24,7 +24,33 @@ jobs:
         run: npm ci
 
       - name: Validate package version numbers
-        run: node scripts/validate-versions.js
+        run: npm run publish:validate-version
 
       - name: Lint, test, and build
         run: npm run checkall
+
+  check-examples:
+    runs-on: ubuntu-latest
+    name: Check Examples
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm ci --prefix examples/development
+          npm ci --prefix examples/rat-game
+
+      - name: Check Development
+        run: npm run checkall
+        working-directory: examples/development
+
+      - name: Check Rat Game
+        run: npm run checkall
+        working-directory: examples/rat-game

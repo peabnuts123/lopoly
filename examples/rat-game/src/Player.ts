@@ -1,4 +1,4 @@
-import { Vector3, Quaternion, Vector2, Color3 } from '@lopoly/core/math';
+import { Vector3, Quaternion, Vector2, Color3 } from '@lopoly/engine/math';
 import { AudioSourceNode, BoxColliderNode, ModelNode, PointLightNode } from '@lopoly/engine/scene/nodes';
 import { SceneNode, type IScene } from '@lopoly/engine/scene';
 import { type IInputSystem } from '@lopoly/engine/input';
@@ -68,7 +68,7 @@ export class Player extends SceneNode {
     const playerAudio = this.audio = {
       jump: new AudioSourceNode(scene, 'player:audio:jump', this),
       move: new AudioSourceNode(scene, 'player:audio:move', this),
-    }
+    };
     playerAudio.jump.global = true;
     playerAudio.jump.volume = 0.3;
     playerAudio.move.volume = 1;

@@ -1,23 +1,12 @@
-import { Comment, ReflectionKind, Converter, Application, JSX } from 'typedoc';
+import { Comment, ReflectionKind, Converter, JSX } from 'typedoc';
 
 /** @type {import('typedoc').TypeDocOptionMap} */
 export default {
-  entryPoints: [
-    "src/core",
-    "src/engine",
-  ],
-  /*
-    @NOTE It is important that packages are built (using declarationMap: true)
-    for typedoc to be able to pick up cross-package references
-  */
-  entryPointStrategy: "packages",
-  packageOptions: {
-    entryPoints: ["src"],
-    entryPointStrategy: "expand",
-    exclude: ["**/*.test.ts", "src/index.ts"],
-    disableSources: true,
-    readme: "docs/index.md",
-  },
+  entryPoints: ['src/'],
+  entryPointStrategy: "expand",
+  exclude: ["**/*.test.ts", "src/index.ts"],
+  disableSources: true,
+  readme: "documentation/index.md",
   projectDocuments: [
     "README.md",
   ],
@@ -30,12 +19,12 @@ export default {
   ],
   router: 'structure',
   out: "./docs",
-  customCss: 'typedoc.css'
+  customCss: 'typedoc.css',
 };
 
 /**
  * Plugin that removes internal `@TODO` block tags from generated docs.
- * @param {Application} application
+ * @param {import('typedoc').Application} application
  */
 function stripTodoTagsPlugin(application) {
   application.converter.on(Converter.EVENT_RESOLVE_BEGIN, (context) => {
@@ -47,7 +36,7 @@ function stripTodoTagsPlugin(application) {
 
 /**
  * Plugin that sets a default description on undocumented elements.
- * @param {Application} application
+ * @param {import('typedoc').Application} application
  */
 function defaultDescriptionsPlugin(application) {
   const DebugShowTypes = false;
@@ -78,15 +67,17 @@ function defaultDescriptionsPlugin(application) {
 
 /**
  * Plugin that adds a button for copying the current page as a `@link` target.
- * @param {Application} application
+ * @param {import('typedoc').Application} application
  */
 function copyLinkButtonPlugin(application) {
   // Callback function called when user clicks the button
   // @NOTE Copied into DOM via `.toString()`
-  async function onClickCopy() {
-    const link = event.target.dataset.copyLink;
+  async function onClickCopy(e) {
+    /* eslint-disable */
+    const link = e.target.dataset.copyLink;
     await navigator.clipboard.writeText(link);
     console.log('Copied @link: ' + link);
+    /* eslint-enable */
   };
 
   // Add button to the DOM
@@ -100,7 +91,7 @@ function copyLinkButtonPlugin(application) {
         "type": "button",
         // "class": "tsd-copy-link-button",
         "data-copy-link": link,
-        "onclick": `${onClickCopy.name}()`,
+        "onclick": `${onClickCopy.name}(event)`,
       },
       "Copy @link",
     );
@@ -108,7 +99,7 @@ function copyLinkButtonPlugin(application) {
 
   // Copy callback function into DOM
   application.renderer.hooks.on("body.end", () => JSX.createElement(JSX.Raw, {
-    html: `<script>${onClickCopy}</script>`
+    html: `<script>${onClickCopy}</script>`,
   }));
 
   /**
@@ -128,7 +119,7 @@ function copyLinkButtonPlugin(application) {
       current.name.startsWith('@lopoly/') === false
     ) {
       pathParts.unshift(current.name);
-      current = current.parent
+      current = current.parent;
     }
 
     return `{@link ${pathParts.join(".")} ${reflection.name}}`;
@@ -138,17 +129,19 @@ function copyLinkButtonPlugin(application) {
 
 /**
  * Plugin that adds a button for collapsing all sections in the sidebar.
- * @param {Application} application
+ * @param {import('typedoc').Application} application
  */
 function collapseSidebarButtonPlugin(application) {
   // Callback function called when user clicks the button
   // @NOTE Copied into DOM via `.toString()`
-  async function onClickCollapse() {
-    document.querySelectorAll('#tsd-nav-container details.tsd-accordion').forEach((details) => details.open = false)
+  function onClickCollapse() {
+    /* eslint-disable */
+    document.querySelectorAll('#tsd-nav-container details.tsd-accordion').forEach((details) => details.open = false);
+    /* eslint-enable */
   };
 
   // Add button to the DOM
-  application.renderer.hooks.on("sidebar.begin", (context) => {
+  application.renderer.hooks.on("sidebar.begin", () => {
     return JSX.createElement(
       "button",
       {
@@ -161,19 +154,19 @@ function collapseSidebarButtonPlugin(application) {
 
   // Copy callback function into DOM
   application.renderer.hooks.on("body.end", () => JSX.createElement(JSX.Raw, {
-    html: `<script>${onClickCollapse}</script>`
+    html: `<script>${onClickCollapse}</script>`,
   }));
 }
 
 
 /**
  * Plugin that removes `Reference` kind elements (basically just re-exports).
- * @param {Application} application
+ * @param {import('typedoc').Application} application
  */
 function stripReferencesPlugin(application) {
   application.converter.on(Converter.EVENT_RESOLVE_BEGIN, (context) => {
     for (const reflection of context.project.getReflectionsByKind(ReflectionKind.Reference)) {
-      context.project.removeReflection(reflection)
+      context.project.removeReflection(reflection);
     }
   });
 }

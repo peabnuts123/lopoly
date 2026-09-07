@@ -1,6 +1,6 @@
 import { defineConfig, type PluginOption } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-import { analyzer } from 'vite-bundle-analyzer'
+import { analyzer } from 'vite-bundle-analyzer';
 
 
 function inlineShadersPlugin(): PluginOption {

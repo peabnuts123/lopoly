@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "composite": true,
+
+    // Environment Settings
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler",
+    "types": [],
+
+    // Other Outputs
+    "declaration": true,
+    "declarationMap": true,
+    "noEmitOnError": true,
+
+    // Stricter Typechecking Options
+    // "exactOptionalPropertyTypes": true, // @TODO
+
+    // Style Options
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+  },
+}

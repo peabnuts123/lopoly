@@ -1,29 +1,58 @@
 {
-  "name": "@lopoly/root",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@lopoly/engine",
+  "version": "0.1.0",
+  "description": "Simple 3D WebGL game engine for making games from the year 2000.",
   "author": "peabnuts123",
   "license": "MIT",
-  "workspaces": [
-    "@NOTE: THESE MUST BE LISTED IN THIS ORDER",
-    "src/engine",
-    "src/core",
-    "src/common"
+  "keywords": [
+    "gamedev",
+    "game development",
+    "game engine",
+    "retro",
+    "retrogaming"
   ],
+  "homepage": "https://github.com/peabnuts123/lopoly",
+  "bugs": {
+    "url": "https://github.com/peabnuts123/lopoly/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peabnuts123/lopoly.git"
+  },
+  "type": "module",
   "scripts": {
-    "build": "npm run build --workspaces",
-    "test": "npm test --workspaces",
-    "publish": "npm run publish --workspaces",
-    "checkall": "npm run checkall --workspaces",
+    "build": "tsx scripts/build.ts",
+    "publish": "tsx scripts/publish.ts",
+    "publish:validate-version": "tsx scripts/validate-version.ts",
     "predocs": "npm run build",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "docs:watch": "nodemon --ext '*' --watch src --watch typedoc.config.mjs --watch typedoc.css --exec 'npm run docs --ignore-scripts'",
+    "docs:serve": "http-server docs -p 8080",
+    "test": "vitest run",
+    "test:watch": "npm run test -- --watch",
+    "test:coverage": "npm run test -- --coverage && http-server coverage -p 8080",
+    "lint": "eslint --max-warnings 0 --no-error-on-unmatched-pattern",
+    "typecheck": "tsc --build tsconfig.json",
+    "checkall": "npm run typecheck && npm run lint && npm run test && npm run build"
+  },
+  "dependencies": {
+    "@gltf-transform/core": "^4.3.0",
+    "@gltf-transform/extensions": "^4.3.0",
+    "fflate": "^0.8.2",
+    "online-3d-viewer": "^0.18.0",
+    "standardized-audio-context": "^25.3.77"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@types/node": "^24.13.3",
     "@vitest/coverage-v8": "^4.1.0",
     "eslint": "^9.39.2",
     "http-server": "^14.1.1",
     "jsdom": "^27.4.0",
+    "nodemon": "^3.1.14",
+    "rimraf": "^6.1.3",
+    "standardized-audio-context-mock": "^9.7.27",
+    "tsc-alias": "^1.9.4",
     "tsx": "^4.21.0",
     "typedoc": "^0.28.20",
     "typescript": "~5.9.3",

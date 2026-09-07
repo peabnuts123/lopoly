@@ -1,4 +1,4 @@
-import { Vector2, Vector3, Color3 } from '@lopoly/core/math';
+import { Vector2, Vector3, Color3 } from '@lopoly/engine/math';
 import { CameraNode, ModelNode, ObjectNode, PointLightNode } from '@lopoly/engine/scene/nodes';
 import { Model } from '@lopoly/engine/models';
 import { Engine } from '@lopoly/engine/Engine';
@@ -144,8 +144,8 @@ export abstract class Game {
     runLoopHooks.push((dt) => {
       cameraParent.position = player.position;
 
-      let cameraHSpeed = 0;
-      let cameraVSpeed = 0;
+      let cameraHSpeed: number;
+      let cameraVSpeed: number;
 
       const cameraAxisXInput = input.getAxisValue('camera:x');
       const cameraAxisYInput = input.getAxisValue('camera:y');

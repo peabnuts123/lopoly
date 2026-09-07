@@ -1,17 +1,17 @@
-import  { Vector2, Vector3, Color3, DegreesToRadians, Matrix4, toFixed, sin, cos, randInt } from '@lopoly/core/math';
-import  { Color4 } from '@lopoly/core/math/Color4';
-import  { RateCounter } from '@lopoly/core/util/RateCounter';
-import  { AudioSourceNode, BoxColliderNode, CameraNode, ColliderNode, ConvexMeshColliderNode, DirectionalLightNode, ModelNode, ObjectNode, PointLightNode } from '@lopoly/engine/scene/nodes';
-import  { Model } from '@lopoly/engine/models';
-import  { Engine } from '@lopoly/engine/Engine';
-import  { Scene, SceneNode, type IScene } from '@lopoly/engine/scene';
-import  { WebFileSystem } from '@lopoly/engine/filesystem/WebFileSystem';
-import  { Material, ShaderBlendingMode } from '@lopoly/engine/materials';
-import  { Cubemap, Texture } from '@lopoly/engine/textures';
-import  { AudioClip } from '@lopoly/engine/audio';
-import  { GltfLoader } from '@lopoly/engine/loaders/GltfLoader';
-import  { AccessorComponentType, type ModelDefinition, type ModelPartDefinition } from '@lopoly/engine/loaders/definitions';
-import  { RayCast, RayCastMode, type RayCastResult } from '@lopoly/engine/collision/RayCast';
+import { Vector2, Vector3, Color3, DegreesToRadians, Matrix4, toFixed, sin, cos, randInt } from '@lopoly/engine/math';
+import { Color4 } from '@lopoly/engine/math/Color4';
+import { RateCounter } from '@lopoly/engine/util/RateCounter';
+import { AudioSourceNode, BoxColliderNode, CameraNode, ColliderNode, ConvexMeshColliderNode, DirectionalLightNode, ModelNode, ObjectNode, PointLightNode } from '@lopoly/engine/scene/nodes';
+import { Model } from '@lopoly/engine/models';
+import { Engine } from '@lopoly/engine/Engine';
+import { Scene, SceneNode, type IScene } from '@lopoly/engine/scene';
+import { WebFileSystem } from '@lopoly/engine/filesystem/WebFileSystem';
+import { Material, ShaderBlendingMode } from '@lopoly/engine/materials';
+import { Cubemap, Texture } from '@lopoly/engine/textures';
+import { AudioClip } from '@lopoly/engine/audio';
+import { GltfLoader } from '@lopoly/engine/loaders/GltfLoader';
+import { AccessorComponentType, type ModelDefinition, type ModelPartDefinition } from '@lopoly/engine/loaders/definitions';
+import { RayCast, RayCastMode, type RayCastResult } from '@lopoly/engine/collision/RayCast';
 
 import { DebugGeometry } from '@game/util/DebugGeometry';
 
@@ -104,7 +104,7 @@ export abstract class Game {
           }),
         })],
         animations: [],
-      }
+      },
     ];
 
     const runLoopHooks: Array<(dt: number, time: number) => void> = [];
@@ -118,7 +118,7 @@ export abstract class Game {
 
     // Load models
     const boxModel = await Model.fromDefinition(engine, models[0]);
-    const planeModel = await Model.fromDefinition(engine, models[6]);
+    // const planeModel = await Model.fromDefinition(engine, models[6]);
     const burgerModel = await Model.fromDefinition(engine, models[1]);
 
     const cameraOrigin = new ObjectNode(scene, 'camera_origin');
@@ -170,21 +170,21 @@ export abstract class Game {
           .subtractSelf(rayOrigin.absolutePosition);
 
         const raycastStart = performance.now();
-        let result = RayCast.scene(rayOrigin.absolutePosition, rayDirection, scene);
+        const result = RayCast.scene(rayOrigin.absolutePosition, rayDirection, scene);
         const raycastEnd = performance.now();
         const raycastHitPosition = result?.hitPosition ?? rayTarget.absolutePosition;
         debugDraw.drawPolyLine([rayOrigin.absolutePosition, raycastHitPosition], { overlay: true, color: Color3.yellow() });
-        debugDraw.drawPolyLine([raycastHitPosition, rayTarget.absolutePosition], { overlay: true, color: Color3.red(), });
-        debugDraw.drawPolyLine([rayOrigin.absolutePosition, rayTarget.absolutePosition.withZ(rayOrigin.absolutePosition.z)], { overlay: true, color: new Color3(0x80, 0, 0), });
+        debugDraw.drawPolyLine([raycastHitPosition, rayTarget.absolutePosition], { overlay: true, color: Color3.red() });
+        debugDraw.drawPolyLine([rayOrigin.absolutePosition, rayTarget.absolutePosition.withZ(rayOrigin.absolutePosition.z)], { overlay: true, color: new Color3(0x80, 0, 0) });
 
         frameCounter.count();
-        rayCastDurationCounter.count(raycastEnd - raycastStart)
+        rayCastDurationCounter.count(raycastEnd - raycastStart);
       });
 
       setTimeout(() => {
         frameCounter.stop();
         rayCastDurationCounter.stop();
-      }, MaxRuntimeSeconds * 1000)
+      }, MaxRuntimeSeconds * 1000);
     }
 
 
@@ -223,7 +223,7 @@ export abstract class Game {
           diffuseColor: color.toColor4(),
           blendingMode: ShaderBlendingMode.Additive(),
           diffuseTexture: 'unset',
-        }))
+        }));
         lightParent.position = new Vector3(
           LightDistance * Math.sin(angle),
           LightDistance * Math.cos(angle),
@@ -337,7 +337,7 @@ export abstract class Game {
     }
     /* Blending test stuff */
     if (Flags.BlendingTestsEnabled) {
-      const space = 1.5
+      const space = 1.5;
       const blendingModel = await Model.fromDefinition(engine, models[2]);
       const blendingAverage = new ModelNode(scene, 'blending_average', blendingModel);
       blendingAverage.position.x = space;
@@ -429,7 +429,7 @@ export abstract class Game {
       const convexColliderNode = new ModelNode(scene, "convex", dumpsterModel);
       convexColliderNode.scale.scaleSelf(2);
       const convexCollider = new ConvexMeshColliderNode(scene, "collider", 0, dumpsterModel, convexColliderNode);
-      const [movingBoxNode, movingBoxCollider] = box(new Vector3(-1.5, 0, 1.3,));
+      const [movingBoxNode, movingBoxCollider] = box(new Vector3(-1.5, 0, 1.3));
 
       runLoopHooks.push(() => {
         // Cruel test, make two dynamic colliders both move into each other
@@ -471,7 +471,7 @@ export abstract class Game {
           // jointWeights: true,
           // vertexColors: true,
           // vertexTexCoords: true,
-        }
+        };
         for (let i = 0; i < primitiveGeometries.length; i++) {
           runLoopHooks.push((_dt, time) => {
             const primitive = primitiveGeometries[i];
@@ -498,10 +498,10 @@ export abstract class Game {
                 const randomTriangleIndices = geometry.triangleIndices[randInt(0, geometry.triangleIndices.length)];
                 const vertexIndex = randInt(0, 3);
                 // const newValue = randInt(0, geometry.vertexPositions.length);
-                const newValue = 0
+                const newValue = 0;
                 if (vertexIndex === 0) randomTriangleIndices.aIndex = newValue;
-                else if (vertexIndex === 1) randomTriangleIndices.bIndex = newValue
-                else if (vertexIndex === 2) randomTriangleIndices.cIndex = newValue
+                else if (vertexIndex === 1) randomTriangleIndices.bIndex = newValue;
+                else if (vertexIndex === 2) randomTriangleIndices.cIndex = newValue;
               }
 
               /* Vertex normals */
@@ -616,7 +616,7 @@ const tmp_RayCastFromCameraDirection = Vector3.zero();
 const tmp_RayCastFromCameraInverseViewProjectionMatrix = new Matrix4();
 function rayCastFromCamera(camera: CameraNode, scene: IScene, screenX: number, screenY: number): RayCastResult | undefined {
   if (screenX > 1 || screenX < 0 || screenY > 1 || screenY < 0) {
-    throw new Error(`Invalid args to ${rayCastFromCamera.name}: screen coordinates must be normalized values from 0-1`)
+    throw new Error(`Invalid args to ${rayCastFromCamera.name}: screen coordinates must be normalized values from 0-1`);
   }
 
   const rayDirection = tmp_RayCastFromCameraInverseViewProjectionMatrix
@@ -641,7 +641,7 @@ function addVertexColors(modelDefinition: ModelDefinition): ModelDefinition {
       callbackFn(partDefinition);
       forEachModelPart(partDefinition.children, callbackFn);
     });
-  }
+  };
 
   forEachModelPart(modelDefinition.rootParts, (partDefinition) => {
     if (partDefinition.mesh !== undefined) {
@@ -653,7 +653,7 @@ function addVertexColors(modelDefinition: ModelDefinition): ModelDefinition {
             componentSize: 4,
             componentType: AccessorComponentType['FLOAT'],
             normalized: false,
-            buffer: new Float32Array(numVertices * 4)
+            buffer: new Float32Array(numVertices * 4),
           };
           for (let i = 0; i < primitiveDefinition.color0Data.buffer.length; i++) {
             primitiveDefinition.color0Data.buffer[i] = 1;
