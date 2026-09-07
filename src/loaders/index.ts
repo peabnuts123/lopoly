@@ -2,6 +2,7 @@
 // import { GltfLoader } from './GltfLoader';
 // import { ObjLoader } from './ObjLoader';
 
+export * from './definitions';
 export * from './GltfLoader';
 export * from './ObjLoader';
 

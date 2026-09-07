@@ -20,6 +20,7 @@
     "paths": {
       "@game/*": ["./src/*"],
       // @NOTE These are only needed because the source is in the same repo.
+      "@lopoly/engine": ["../../src"],
       "@lopoly/engine/*": ["../../src/*"],
     },
 

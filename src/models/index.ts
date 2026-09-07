@@ -1,3 +1,4 @@
+export * from './geometry';
 export * from './MeshPrimitive';
 export * from './MeshPrimitiveCache';
 export * from './MeshSkin';

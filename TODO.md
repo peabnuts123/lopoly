@@ -39,15 +39,13 @@
     - [x] ~~observable.ts~~
     - [x] ~~____Geometry~~
   - [x] ~~Build pipeline and CD~~
-  - [ ] Examine dependencies in the example projects. What's good?
-  <!-- - [ ] Ensure `@lopoly/engine` has a dependency on `@lopoly/engine` -->
-  - [ ] Export everything from top-level import
+  - [x] ~~Export everything from top-level import~~
   - [x] ~~Maybe we just fold core into engine~~
     - [x] ~~Remove hacks and aliases from typedoc / simplify config~~
     - [x] ~~Copy files across~~
     - [x] ~~Update code that references `@lopoly/engine`~~
     - [x] ~~Remove references / complex config from tsconfig(s)~~
-    - [ ] unpublish from npm
+    - [x] ~~unpublish @lopoly/core from npm~~
     - [x] ~~example projects / code samples in docs~~
     - [x] ~~Build / publish scripts~~
     - [x] ~~Delete `core/`~~
@@ -57,16 +55,14 @@
     - [x] ~~validate-versions.js needs some renames and stuff~~
     - [x] ~~package.json simplification (?) / repository property~~
   - [ ] Review TODOs and clean up documentation / repo
-    - [] Rewrite this README (move backlogs to TODO.md or something)
-    <!-- - [ ] Basic docs in `@lopoly/engine` README -->
-    <!-- - [ ] Basic info/docs in `@lopoly/engine` README -->
-    - [ ] Check / redo metadata in package.json (descriptions need work)
+    - [x] ~~Rewrite this README (move backlogs to TODO.md or something)~~
+    - [x] ~~Check / redo metadata in package.json (descriptions need work)~~
     - [ ] Read through backlogs, remove done/old stuff, assemble rough milestones / priorities
     - [ ] Look through TODOs in the code for any more milestone stuff
   - [x] ~~Set a proper license on LoPoly~~
-  - [ ] Make a test project consuming the package from npm to QA it's all good
 
 ## Milestone: 0.2
+  - [ ] Update Rat Game to reference npm instead of local alias
   - [ ] Collision handling for concave geometry e.g. levels
   - [ ] Ability to reset / stop animation
     - [ ] Config e.g. animation looping

@@ -5,8 +5,10 @@ export * from './filesystem';
 export * from './input';
 export * from './loaders';
 export * from './materials';
+export * from './math';
 export * from './models';
 export * from './scene';
 export * from './textures';
-
+export * from './transform';
+export * from './util';
 export * from './Engine';
