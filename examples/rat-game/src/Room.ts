@@ -1,4 +1,4 @@
-import  { Vector3 } from "@lopoly/core/math";
+import  { Vector3 } from "@lopoly/engine/math";
 import  { Model } from "@lopoly/engine/models";
 import  { SceneNode, type IScene } from "@lopoly/engine/scene";
 import  { AudioSourceNode, BoxColliderNode, ModelNode } from "@lopoly/engine/scene/nodes";
@@ -126,14 +126,14 @@ export class Room extends SceneNode {
       pillarModel,
       coinModel,
       pickupCoinAudio,
-    })
+    });
   }
 
   public static calculateBounds(size: Vector3): RoomBounds {
     return {
       min: new Vector3(-size.x / 2, -size.y / 2, 0),
       max: new Vector3(size.x / 2, size.y / 2, size.z),
-    }
+    };
   }
 }
 

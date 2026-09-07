@@ -40,12 +40,26 @@
     - [x] ~~____Geometry~~
   - [x] ~~Build pipeline and CD~~
   - [ ] Examine dependencies in the example projects. What's good?
-  - [ ] Ensure `@lopoly/engine` has a dependency on `@lopoly/core`
+  <!-- - [ ] Ensure `@lopoly/engine` has a dependency on `@lopoly/engine` -->
   - [ ] Export everything from top-level import
+  - [x] ~~Maybe we just fold core into engine~~
+    - [x] ~~Remove hacks and aliases from typedoc / simplify config~~
+    - [x] ~~Copy files across~~
+    - [x] ~~Update code that references `@lopoly/engine`~~
+    - [x] ~~Remove references / complex config from tsconfig(s)~~
+    - [ ] unpublish from npm
+    - [x] ~~example projects / code samples in docs~~
+    - [x] ~~Build / publish scripts~~
+    - [x] ~~Delete `core/`~~
+    - [x] ~~? `common/` too?~~
+    - [x] ~~Update Release GH workflow~~
+    - [x] ~~eslint settings.json~~
+    - [x] ~~validate-versions.js needs some renames and stuff~~
+    - [x] ~~package.json simplification (?) / repository property~~
   - [ ] Review TODOs and clean up documentation / repo
-    - [ ] Rewrite this README (move backlogs to TODO.md or something)
-    - [ ] Basic docs in `@lopoly/engine` README
-    - [ ] Basic info/docs in `@lopoly/core` README
+    - [] Rewrite this README (move backlogs to TODO.md or something)
+    <!-- - [ ] Basic docs in `@lopoly/engine` README -->
+    <!-- - [ ] Basic info/docs in `@lopoly/engine` README -->
     - [ ] Check / redo metadata in package.json (descriptions need work)
     - [ ] Read through backlogs, remove done/old stuff, assemble rough milestones / priorities
     - [ ] Look through TODOs in the code for any more milestone stuff

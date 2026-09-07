@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.common.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "paths": {
+      "@lopoly/engine/*": [
+        "./src/*"
+      ],
+    },
+  },
+  "include": [
+    "src/",
+  ],
+  "exclude": [
+    "**/*.test.ts",
+  ]
+}

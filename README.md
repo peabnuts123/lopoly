@@ -33,7 +33,7 @@ npm install @lopoly/engine
 
 ## Documentation
 
-- [📚 Documentation site](https://peabnuts123.github.io/lopoly/_lopoly/engine.html)
+- [📚 Documentation site](https://peabnuts123.github.io/lopoly/)
 - [🧱 Example projects](./examples/README.md)
 
 ### Basic usage
@@ -55,7 +55,7 @@ npm install @lopoly/engine
 
 ```typescript
 // index.ts
-import { Color3, Vector3 } from '@lopoly/core/math';
+import { Color3, Vector3 } from '@lopoly/engine/math';
 import { Engine, WebFileSystem, GltfLoader, Model, Scene, CameraNode, DirectionalLightNode, ModelNode } from '@lopoly/engine';
 
 // Create engine attached to canvas + virtual "file system"

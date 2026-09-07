@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Validate package version numbers
-        run: node scripts/validate-versions.js
+        run: npm run publish:validate-version
 
       - name: Lint, test, and build
         run: npm run checkall

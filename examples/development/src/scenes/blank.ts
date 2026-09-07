@@ -1,4 +1,4 @@
-import { Vector3, Color3 } from '@lopoly/core/math';
+import { Vector3, Color3 } from '@lopoly/engine/math';
 import { CameraNode, ModelNode, PointLightNode } from '@lopoly/engine/scene/nodes';
 import { Model } from '@lopoly/engine/models';
 import { Engine } from '@lopoly/engine/Engine';

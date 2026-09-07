@@ -1,5 +1,5 @@
 
-import  { Vector3, Quaternion, Color4 } from '@lopoly/core/math';
+import  { Vector3, Quaternion, Color4 } from '@lopoly/engine/math';
 import  { AccessorComponentType, MeshPrimitiveMode, type MaterialDefinition, type MeshPrimitiveDefinition, type ModelPartDefinition } from '@lopoly/engine/loaders/definitions';
 import  type { IFileSystem } from '@lopoly/engine/filesystem';
 import  { AxisAlignedBoundingBox } from '@lopoly/engine/collision';
@@ -66,7 +66,6 @@ export class DebugGeometry {
       diffuseColor: diffuseColor ?? Color4.white(),
       diffuseTexture: textureBytes && {
         buffer: textureBytes,
-        texCoord: 0,
       },
     };
   }
@@ -89,7 +88,7 @@ export class DebugGeometry {
     const positionBuffer = new Float32Array(vertexCountX * vertexCountY * 3 /* values per vertex */);
     const normalsBuffer = new Float32Array(positionBuffer.length);
     const indicesBuffer = new Uint32Array(subdivisionsX * subdivisionsY * 2 /* triangles */ * 3 /* indices per triangle */);
-    const colorsBuffer = new Float32Array(positionBuffer.length)
+    const colorsBuffer = new Float32Array(positionBuffer.length);
     const textureCoordinatesBuffer = new Float32Array(positionBuffer.length);
 
 
@@ -175,7 +174,7 @@ export class DebugGeometry {
         buffer: indicesBuffer,
       },
       ...overrides,
-    }
+    };
   }
 
   public cubePrimitive(overrides: Partial<MeshPrimitiveDefinition> = {}): MeshPrimitiveDefinition {

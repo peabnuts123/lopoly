@@ -1,4 +1,4 @@
-import  { Quaternion, Vector3 } from "@lopoly/core/math";
+import  { Quaternion, Vector3 } from "@lopoly/engine/math";
 import  type { IInputSystem } from "@lopoly/engine/input";
 import  { SceneNode, type IScene } from "@lopoly/engine/scene";
 import  { CameraNode, ObjectNode } from "@lopoly/engine/scene/nodes";
@@ -25,7 +25,7 @@ export class Camera extends SceneNode {
 
     /* Camera */
     const camera = this.camera = new CameraNode(scene, 'camera', 60, aspectRatio, pivot);
-    camera.position.y = CameraDistance
+    camera.position.y = CameraDistance;
   }
 
   public override onUpdate(dt: number): void {
