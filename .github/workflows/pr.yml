@@ -23,7 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Validate package version numbers
+      - name: Validate package version number
+        if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-publish') }}
         run: npm run publish:validate-version
 
       - name: Lint, test, and build
