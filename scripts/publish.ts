@@ -7,7 +7,7 @@ import { pathExists, spawnAsync, type PackageJsonType } from './util';
 /**
  * Whether to actually publish to npm (false) or just do a "dry run" (true).
  */
-const DryRun: boolean = true;
+const DryRun: boolean = false;
 /**
  * Path to package.json.
  */
