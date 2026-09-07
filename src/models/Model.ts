@@ -1,8 +1,8 @@
 import  type { Matrix4 } from "@lopoly/engine/math/Matrix4";
 import  type { DrawTask, IEngine } from "@lopoly/engine/Engine";
-import  type { ModelDefinition, ModelPartDefinition } from "@lopoly/engine/loaders/definitions";
-import  { Animation } from "@lopoly/engine/animation";
-import  { Material } from "@lopoly/engine/materials";
+import  type { ModelDefinition, ModelPartDefinition } from "@lopoly/engine/loaders/definitions/model";
+import  { Animation } from "@lopoly/engine/animation/Animation";
+import  { Material } from "@lopoly/engine/materials/Material";
 
 import { ModelPart } from "./ModelPart";
 import { MeshSkin } from "./MeshSkin";

@@ -1,5 +1,5 @@
-import  { Vector3, type IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
-import  { AxisAlignedBoundingBox } from "@lopoly/engine/collision";
+import { Vector3, type IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
+import { AxisAlignedBoundingBox } from "@lopoly/engine/collision";
 
 import { ColliderNode, type CalculateIntersectionResult } from "./ColliderNode";
 

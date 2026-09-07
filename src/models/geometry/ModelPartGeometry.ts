@@ -14,7 +14,7 @@ import {
   type IReadonlyTriangleIndices,
   type JointWeightsKey,
   type Triangle,
-} from "./index";
+} from "./Geometry";
 
 
 /** Constructor params for {@linkcode ModelPartGeometry}. */

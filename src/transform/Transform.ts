@@ -1,5 +1,6 @@
-import  { Computed, WritableComputed } from "@lopoly/engine/util";
-import  { Vector3, Matrix4, Quaternion } from "@lopoly/engine/math";
+import { Computed } from "@lopoly/engine/util/Computed";
+import { WritableComputed } from "@lopoly/engine/util/WritableComputed";
+import { Vector3, Matrix4, Quaternion } from "@lopoly/engine/math";
 
 import { Rotation } from "./Rotation";
 

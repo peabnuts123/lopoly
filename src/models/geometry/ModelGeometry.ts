@@ -13,7 +13,7 @@ import {
   type EdgeIndices,
   type IReadonlyTriangleIndices,
   type Triangle,
-} from "./index";
+} from "./Geometry";
 
 /**
  * Exposes a read-only view of the combined geometry of an entire model.

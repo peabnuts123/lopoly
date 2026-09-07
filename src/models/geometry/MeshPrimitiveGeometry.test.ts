@@ -5,7 +5,7 @@ import  { AccessorComponentType, MeshPrimitiveMode, type MeshPrimitiveDefinition
 import  { Color3, Color4, Vector2, Vector3 } from '@lopoly/engine/math';
 import { expectVectorArraysToBeEqual } from '@test/util/expect';
 import  { AxisAlignedBoundingBox } from '@lopoly/engine/collision/AxisAlignedBoundingBox';
-import { JointIndices, JointWeights, TriangleIndices } from '.';
+import { JointIndices, JointWeights, TriangleIndices } from './Geometry';
 
 /*
   @TODO Test backlog

@@ -1,4 +1,4 @@
-import  { SceneNode } from "@lopoly/engine/scene";
+import { SceneNode } from "@lopoly/engine/scene/SceneNode";
 
 export class ObjectNode extends SceneNode {
 }

@@ -1,7 +1,9 @@
-import  { Computed, Observable, WritableComputed } from "@lopoly/engine/util";
-import  { Quaternion, type IReadOnlyQuaternion } from "@lopoly/engine/math/Quaternion";
-import  { EulerVector3 } from "@lopoly/engine/math/EulerVector3";
-import  type { Vector3Like } from "@lopoly/engine/math/Vector3";
+import { Computed } from "@lopoly/engine/util/Computed";
+import { Observable } from "@lopoly/engine/util/Observable";
+import { WritableComputed } from "@lopoly/engine/util/WritableComputed";
+import { Quaternion, type IReadOnlyQuaternion } from "@lopoly/engine/math/Quaternion";
+import { EulerVector3 } from "@lopoly/engine/math/EulerVector3";
+import type { Vector3Like } from "@lopoly/engine/math/Vector3";
 
 // I dub thee... "Eulernion"
 export class Rotation extends Observable {

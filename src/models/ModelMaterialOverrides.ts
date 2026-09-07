@@ -1,5 +1,7 @@
-import  { Computed, Observable, type StopObservingFn } from "@lopoly/engine/util";
-import  { Material, MaterialInstance } from "@lopoly/engine/materials";
+import { Computed } from "@lopoly/engine/util/Computed";
+import { Observable, type StopObservingFn } from "@lopoly/engine/util/Observable";
+import { Material } from "@lopoly/engine/materials/Material";
+import { MaterialInstance } from "@lopoly/engine/materials/MaterialInstance";
 
 export type MaterialOverrideType = 'override' | 'replace';
 export interface MaterialOverride {

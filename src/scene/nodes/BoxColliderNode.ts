@@ -1,5 +1,6 @@
 import  { Vector3 } from "@lopoly/engine/math/Vector3";
-import  { SceneNode, type IScene } from "@lopoly/engine/scene";
+import { type IScene } from "@lopoly/engine/scene/Scene";
+import { SceneNode } from "@lopoly/engine/scene/SceneNode";
 import  type { IWireframeDrawable, WireframeFaces } from "@lopoly/engine/util/DebugDraw";
 import { SATColliderNode } from "./SatColliderNode";
 import type { CollisionGroup } from "./ColliderNode";

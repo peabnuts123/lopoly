@@ -1,6 +1,9 @@
-import  { Color4, Vector2, Vector3, type IReadonlyColor4, type IReadonlyVector2, type IReadonlyVector3 } from "@lopoly/engine/math";
-import  { Computed, Observable, ObservableEvent, type Mutable, type TypedArray } from "@lopoly/engine/util";
-import  type { IEngine } from "@lopoly/engine/Engine";
+import { Color4, Vector2, Vector3, type IReadonlyColor4, type IReadonlyVector2, type IReadonlyVector3 } from "@lopoly/engine/math";
+import { Computed } from "@lopoly/engine/util/Computed";
+import { Observable } from "@lopoly/engine/util/Observable";
+import { ObservableEvent } from "@lopoly/engine/util/ObservableEvent";
+import { type Mutable, type TypedArray } from "@lopoly/engine/util/types";
+import type { IEngine } from "@lopoly/engine/Engine";
 import {
   type AnyAttributeDefinition,
   type AttributeDefinition,
@@ -17,8 +20,8 @@ import {
   type TriangleIndicesAttributeDefinition,
   AccessorComponentType,
 } from "@lopoly/engine/loaders/definitions";
-import  { createBuffer, BufferType } from "@lopoly/engine/util/createBuffer";
-import  type { IReadonlyAxisAlignedBoundingBox } from "@lopoly/engine/collision";
+import { createBuffer, BufferType } from "@lopoly/engine/util/createBuffer";
+import type { IReadonlyAxisAlignedBoundingBox } from "@lopoly/engine/collision";
 import {
   JointIndices,
   JointWeights,
@@ -29,7 +32,7 @@ import {
   type IReadonlyJointWeights,
   type IReadonlyTriangleIndices,
   type Triangle,
-} from "./index";
+} from "./Geometry";
 
 
 export type BaseVertexDefinition<TAttributeDefinition extends AnyAttributeDefinition> =

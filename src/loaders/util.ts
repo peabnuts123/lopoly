@@ -1,7 +1,7 @@
-import  { Vector3 } from "@lopoly/engine/math/Vector3";
-import  { Quaternion } from "@lopoly/engine/math/Quaternion";
-import  { Matrix4 } from "@lopoly/engine/math/Matrix4";
-import  { type TypedArray } from "@lopoly/engine/util";
+import { Vector3 } from "@lopoly/engine/math/Vector3";
+import { Quaternion } from "@lopoly/engine/math/Quaternion";
+import { Matrix4 } from "@lopoly/engine/math/Matrix4";
+import { type TypedArray } from "@lopoly/engine/util/types";
 import type { AnimationDefinition, ModelDefinition, ModelPartDefinition } from "./definitions";
 
 

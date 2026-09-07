@@ -1,6 +1,6 @@
-import  type { TypedArray } from "@lopoly/engine/util/types";
+import  type { TypedArray } from '@lopoly/engine/util/types';
 
-import { Observable } from "../util";
+import { Observable } from '@lopoly/engine/util/Observable';
 import { CannotInvertMatrixError } from "./Matrix3";
 import type { Quaternion } from "./Quaternion";
 import type { Vector3 } from "./Vector3";

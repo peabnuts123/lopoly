@@ -1,4 +1,4 @@
-import  { Observable } from "@lopoly/engine/util";
+import  { Observable } from "@lopoly/engine/util/Observable";
 import { type Color3Like } from "./Color3";
 import { clamp } from "./util";
 

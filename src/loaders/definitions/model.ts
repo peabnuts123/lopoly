@@ -1,9 +1,9 @@
-import  type { Matrix4 } from "@lopoly/engine/math/Matrix4";
-import  type { Quaternion } from "@lopoly/engine/math/Quaternion";
-import  type { Vector3 } from "@lopoly/engine/math/Vector3";
-import  type { Enum } from "@lopoly/engine/util";
-import  type { VirtualFile } from "@lopoly/engine/filesystem";
-import  type { AxisAlignedBoundingBox } from "@lopoly/engine/collision";
+import type { Matrix4 } from "@lopoly/engine/math/Matrix4";
+import type { Quaternion } from "@lopoly/engine/math/Quaternion";
+import type { Vector3 } from "@lopoly/engine/math/Vector3";
+import type { Enum } from "@lopoly/engine/util/types";
+import type { VirtualFile } from "@lopoly/engine/filesystem";
+import type { AxisAlignedBoundingBox } from "@lopoly/engine/collision";
 
 import type { AnimationDefinition } from "./animation";
 import type { MaterialDefinition } from "./material";

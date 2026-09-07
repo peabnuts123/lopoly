@@ -1,5 +1,6 @@
-import  { Color3 } from "@lopoly/engine/math/Color3";
-import  { type IScene, SceneNode } from "@lopoly/engine/scene";
+import { Color3 } from "@lopoly/engine/math/Color3";
+import { type IScene } from "@lopoly/engine/scene/Scene";
+import { SceneNode } from "@lopoly/engine/scene/SceneNode";
 
 /** A value between 0 and 1, inclusive. */
 export type LightIntensity = number;

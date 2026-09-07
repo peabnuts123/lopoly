@@ -10,7 +10,7 @@ import {
   type EdgeIndices,
   type IReadonlyTriangleIndices,
   type Triangle,
-} from "./index";
+} from "./Geometry";
 
 interface ModelNodeGeometryArgs {
   model: Model;
