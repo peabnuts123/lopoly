@@ -85,7 +85,8 @@
   - [ ] (ARTIFICIAL PRIORITY - work is small and public-facing) Rename / re-order params in `Matrix4.fromRotationTranslationScaleSelf()`
   - [ ] Docs: Update code references to use `{@linkcode foo}` in favour of backticks. Use regex: /^\s*(/\*\*|\*).*`\w/
   - [ ] Make sure all tmp values are called `tmp_<thing>_<purpose>` and are static where possible
-  - Remove debug input debug_allKnownKeyCodes
+  - [ ] Remove debug input debug_allKnownKeyCodes
+  - [ ] Dog fooding: Are .objs importing properly?
 
 ## Milestone: 0.3 - "Squashinembugs"
   - [ ] Camera should infer its aspect ratio, it shouldn't be a param
