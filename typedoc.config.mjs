@@ -91,7 +91,7 @@ function copyLinkButtonPlugin(application) {
         "type": "button",
         // "class": "tsd-copy-link-button",
         "data-copy-link": link,
-        "onclick": `${onClickCopy.name}()`,
+        "onclick": `${onClickCopy.name}(event)`,
       },
       "Copy @link",
     );
