@@ -144,8 +144,8 @@ export abstract class Game {
     runLoopHooks.push((dt) => {
       cameraParent.position = player.position;
 
-      let cameraHSpeed = 0;
-      let cameraVSpeed = 0;
+      let cameraHSpeed: number;
+      let cameraVSpeed: number;
 
       const cameraAxisXInput = input.getAxisValue('camera:x');
       const cameraAxisYInput = input.getAxisValue('camera:y');

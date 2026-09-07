@@ -6,15 +6,20 @@
   "scripts": {
     "start": "vite --host",
     "build": "vite build",
-    "typecheck": "tsc --build tsconfig.json"
+    "lint": "eslint --max-warnings 0 --no-error-on-unmatched-pattern",
+    "typecheck": "tsc --build tsconfig.json",
+    "checkall": "npm run typecheck && npm run lint && CI=true npm run build"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/vite": "^4.1.18",
     "autoprefixer": "^10.4.23",
+    "eslint": "^10.10.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
+    "typescript-eslint": "^8.70.0",
     "vite": "^8.0.3",
     "vite-bundle-analyzer": "^1.3.8"
   }
