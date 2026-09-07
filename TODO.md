@@ -60,8 +60,7 @@
     - [x] ~~Read through backlogs, remove done/old stuff, assemble rough milestones / priorities~~
     - [x] ~~Look through TODOs in the code for any more milestone stuff~~
   - [x] ~~Set a proper license on LoPoly~~
-  - [ ] Tidy up development example so we don't just have permanently uncommitted changes
-    - Also top-level files: promote or delete
+  - [x] ~~Tidy up development example so we don't just have permanently uncommitted changes~~
 
 ## Milestone: 0.2 - "First job after uni"
   - [ ] Tidy up light attenuation shader code
