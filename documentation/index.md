@@ -57,13 +57,13 @@ A {@link scene/SceneNode.SceneNode SceneNode} is any node in the hierarchy withi
 - {@link scene/nodes/AudioSourceNode.AudioSourceNode AudioSourceNode}
 - etc.
 
-Scene nodes have a {@link @lopoly/engine!transform/Transform.Transform Transform} (i.e. position, rotation, scale) as well as children. Scene nodes inherit their parent's transform (e.g. moving the parent also moves the child).
+Scene nodes have a {@link transform/Transform.Transform Transform} (i.e. position, rotation, scale) as well as children. Scene nodes inherit their parent's transform (e.g. moving the parent also moves the child).
 
 When accessing a scene node's transform, you will note two versions of each property e.g.
-  - {@link @lopoly/engine!transform/Transform.Transform.position position}
-  - {@link @lopoly/engine!transform/Transform.Transform.absolutePosition absolutePosition}
+  - {@link transform/Transform.Transform.position position}
+  - {@link transform/Transform.Transform.absolutePosition absolutePosition}
 
-Both properties are mutable. The absolute property (e.g. {@link @lopoly/engine!transform/Transform.Transform.absolutePosition absolutePosition}) references the property irrespective of the hierarchy (e.g. the node's actual position within the scene), whereas the other property (e.g. {@link @lopoly/engine!transform/Transform.Transform.position position}) references the property local to its parent (e.g. the node's position relative to its parent).
+Both properties are mutable. The absolute property (e.g. {@link transform/Transform.Transform.absolutePosition absolutePosition}) references the property irrespective of the hierarchy (e.g. the node's actual position within the scene), whereas the other property (e.g. {@link transform/Transform.Transform.position position}) references the property local to its parent (e.g. the node's position relative to its parent).
 
 **Note** that, unlike Unity, nodes don't have "components" or any other attributes. Rather, "game objects" are composed of hierarchies of different nodes.
 
@@ -139,7 +139,7 @@ engine.run((dt) => {
   - Use this parameter to write logic that is independent of the framerate
 - `time`
   - The number of **seconds** passed since the start of the game i.e. since {@link Engine.Engine.run Engine.run()}
-  - Use this parameter to write logic that would normally keep a sum of `dt` e.g. animating something with {@link @lopoly/engine!math/util.cos cos}
+  - Use this parameter to write logic that would normally keep a sum of `dt` e.g. animating something with {@link math/util.cos cos}
 - `stop`
   - Stop the game application
 
@@ -357,7 +357,7 @@ Animations target model parts by name, so the skeleton/hierarchy has to match be
 
 Individual {@link models/MeshPrimitive.MeshPrimitive MeshPrimitives} are drawn using a single {@link materials/Material.Material Material}. Materials in LoPoly have a few simple properties:
 - Diffuse color
-  - A {@link @lopoly/engine!math/Color4.Color4 Color4} "tint" applied to the mesh primitive
+  - A {@link math/Color4.Color4 Color4} "tint" applied to the mesh primitive
   - Multiplied with vertex color and diffuse texture
 - Diffuse texture
   - A {@link textures/Texture.Texture Texture} to apply to the mesh primitive based on the vertices' texture coordinates
@@ -532,7 +532,7 @@ Directional lights can be added to a scene with {@link scene/nodes/DirectionalLi
   - {@link scene/nodes/DirectionalLightNode.DirectionalLightNode.intensity intensity}
     - Scalar multiplier for the light's brightness between 0 and 1.
 
-A directional light's direction is determined by its {@link @lopoly/engine!transform/Transform.Transform Transform}. By default, a {@link scene/nodes/DirectionalLightNode.DirectionalLightNode DirectionalLightNode} shines along {@link @lopoly/engine!math/Vector3.Vector3.forward Vector3.forward()}.
+A directional light's direction is determined by its {@link transform/Transform.Transform Transform}. By default, a {@link scene/nodes/DirectionalLightNode.DirectionalLightNode DirectionalLightNode} shines along {@link math/Vector3.Vector3.forward Vector3.forward()}.
 
 ```typescript
 const sun = new DirectionalLightNode(scene, 'sun', { color: Color3.white() })
