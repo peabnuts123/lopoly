@@ -1,5 +1,3 @@
-/* @TODO Rename to `utils.ts` */
-
 export const Pi = Math.PI;
 export const Tau = Pi * 2;
 
