@@ -1,4 +1,4 @@
-import  { Observable } from "@lopoly/engine/util/Observable";
+import { Observable } from "@lopoly/engine/util/Observable";
 import { type Color3Like } from "./Color3";
 import { clamp } from "./util";
 
@@ -37,21 +37,35 @@ export interface IReadonlyColor4 {
 export class Color4 extends Observable implements IReadonlyColor4 {
   private readonly internal: Color4InternalBuffer;
 
+  public constructor(color: Color4Like);
   public constructor(color: Color3Like, a?: number);
   public constructor(r: number, g: number, b: number, a?: number);
-  public constructor(redOrColor: number | Color3Like, greenOrAlpha?: number, blue?: number, alpha?: number) {
+  public constructor(redOrColor: number | Color3Like | Color4Like, greenOrAlpha?: number, maybeBlue?: number, maybeAlpha?: number) {
     super();
     this.internal = new Color4InternalBuffer();
     if (typeof redOrColor === 'number') {
-      this.internal.r = redOrColor;
-      this.internal.g = greenOrAlpha as number;
-      this.internal.b = blue as number;
-      this.internal.a = alpha ?? 0xFF;
+      if (typeof greenOrAlpha === 'number' && typeof maybeBlue === 'number') {
+        // RGB(A)
+        this.internal.r = redOrColor;
+        this.internal.g = greenOrAlpha;
+        this.internal.b = maybeBlue;
+        this.internal.a = maybeAlpha ?? 0xFF;
+      } else throw new Error(`Unrecognised parameters to ${Color4.name}`);
     } else {
-      this.internal.r = redOrColor.r;
-      this.internal.g = redOrColor.g;
-      this.internal.b = redOrColor.b;
-      this.internal.a = greenOrAlpha ?? 0xFF;
+      const color = redOrColor;
+      if ('a' in color) {
+        // Color4
+        this.internal.r = color.r;
+        this.internal.g = color.g;
+        this.internal.b = color.b;
+        this.internal.a = color.a;
+      } else {
+        // Color3 + (Alpha)
+        this.internal.r = color.r;
+        this.internal.g = color.g;
+        this.internal.b = color.b;
+        this.internal.a = greenOrAlpha ?? 0xFF;
+      }
     }
   }
 

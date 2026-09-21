@@ -1,4 +1,4 @@
-import  { Observable } from "@lopoly/engine/util/Observable";
+import { Observable } from "@lopoly/engine/util/Observable";
 
 import { Quaternion } from "./Quaternion";
 import { RadiansToDegrees } from "./util";
@@ -23,16 +23,25 @@ class EulerVector3InternalBuffer {
 export class EulerVector3 extends Observable {
   protected internal: EulerVector3InternalBuffer;
 
-  public constructor(
-    x: number,
-    y: number,
-    z: number,
-  ) {
+  public constructor(color: Vector3Like);
+  public constructor(x: number, y: number, z: number);
+  public constructor(xOrVector: number | Vector3Like, maybeY?: number, maybeZ?: number) {
     super();
     this.internal = new EulerVector3InternalBuffer();
-    this.internal.x = x;
-    this.internal.y = y;
-    this.internal.z = z;
+    if (typeof xOrVector === 'number') {
+      if (typeof maybeY === 'number' && typeof maybeZ === 'number') {
+        /* XYZ */
+        this.internal.x = xOrVector;
+        this.internal.y = maybeY;
+        this.internal.z = maybeZ;
+      } else throw new Error(`Unrecognised parameters to ${EulerVector3.name}`);
+    } else {
+      /* Vector3 */
+      const vector = xOrVector;
+      this.internal.x = vector.x;
+      this.internal.y = vector.y;
+      this.internal.z = vector.z;
+    }
   }
 
   public setValue(x: number, y: number, z: number): this;
