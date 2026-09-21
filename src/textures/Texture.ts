@@ -28,9 +28,7 @@ export class Texture {
 
   public static async load(engine: IEngine, path: string): Promise<Texture> {
     const textureFile = await engine.fileSystem.readFile(path);
-    const blob = new Blob([textureFile.bytes]);
-    const bitmap = await window.createImageBitmap(blob);
-    return new Texture(engine, bitmap);
+    return this.loadFromBuffer(engine, textureFile.bytes);
   }
 
   public static async loadFromBuffer(engine: IEngine, buffer: Uint8Array<ArrayBuffer>): Promise<Texture> {

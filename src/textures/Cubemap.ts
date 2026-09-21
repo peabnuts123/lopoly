@@ -1,4 +1,4 @@
-import  type { IEngine } from "@lopoly/engine/Engine";
+import type { IEngine } from "@lopoly/engine/Engine";
 
 export class Cubemap {
   public readonly glTexture: WebGLTexture;
@@ -37,18 +37,30 @@ export class Cubemap {
     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
 
-    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
   }
 
   /**
-   * Create a {@linkcode Cubemap} from a set of individual texture files.
+   * Create a {@link Cubemap} from a set of individual texture files.
    * @param engine Engine instance.
    * @param paths Paths for each individual texture.
    */
   public static async loadSeparate(engine: IEngine, paths: CubemapParts<string>): Promise<Cubemap> {
-    const bitmaps = await mapCubemapParts(paths, async (path): Promise<ImageBitmap> => {
+    const buffers = await mapCubemapParts(paths, async (path) => {
       const textureFile = await engine.fileSystem.readFile(path);
-      const blob = new Blob([textureFile.bytes]);
+      return textureFile.bytes;
+    });
+    return this.loadSeparateFromBuffer(engine, buffers);
+  }
+
+  /**
+   * Create a {@link Cubemap} from a set of individual texture files.
+   * @param engine Engine instance.
+   * @param paths Buffers for each individual texture.
+   */
+  public static async loadSeparateFromBuffer(engine: IEngine, buffers: CubemapParts<Uint8Array<ArrayBuffer>>): Promise<Cubemap> {
+    const bitmaps = await mapCubemapParts(buffers, async (buffer) => {
+      const blob = new Blob([buffer]);
       const bitmap = await window.createImageBitmap(blob);
       return bitmap;
     });
@@ -57,7 +69,7 @@ export class Cubemap {
   }
 
   /**
-   * Create a {@linkcode Cubemap} from a single texture containing six
+   * Create a {@link Cubemap} from a single texture containing six
    * textures in a "box-net" layout.
    * ```
    *     0    1    2    3
@@ -70,11 +82,31 @@ export class Cubemap {
    *   └────┴────┴────┴────┘
    * ```
    * @param engine Engine instance.
-   * @param path Path to texture file containing the cubemap textures in a box-net layout.
+  * @param path Path to the cubemap texture file in a box-net layout.
    */
   public static async loadBoxNet(engine: IEngine, path: string): Promise<Cubemap> {
     const textureFile = await engine.fileSystem.readFile(path);
-    const blob = new Blob([textureFile.bytes]);
+    return this.loadBoxNetFromBuffer(engine, textureFile.bytes);
+  }
+
+  /**
+   * Create a {@link Cubemap} from a single texture containing six
+   * textures in a "box-net" layout.
+   * ```
+   *     0    1    2    3
+   *   ┌────┬────┬────┬────┐
+   * 0 │    │ up │    │    │
+   *   ├────┼────┼────┼────┤
+   * 1 │ lf │ fd │ rt │ bk │
+   *   ├────┼────┼────┼────┤
+   * 2 │    │ dn │    │    │
+   *   └────┴────┴────┴────┘
+   * ```
+   * @param engine Engine instance.
+  * @param buffer Buffer containing the bytes of a cubemap texture file in a box-net layout.
+   */
+  public static async loadBoxNetFromBuffer(engine: IEngine, buffer: Uint8Array<ArrayBuffer>): Promise<Cubemap> {
+    const blob = new Blob([buffer]);
     const bitmap = await window.createImageBitmap(blob);
 
     // Read texture into canvas
