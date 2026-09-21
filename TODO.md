@@ -1,66 +1,11 @@
 # TODO
 
-## Milestone: 0.1 - "Just make it exist first"
-  - [x] ~~Transform hierarchy~~
-  - [x] ~~`Rotation` as a type that deals with quaternions OR euler angles?~~
-  - [x] ~~Rotation vectors wrap somehow~~
-  - [x] ~~Interface for colors is 0xFF, shader receives [0..1] (use `normalized` prop in gl calls)~~
-  - [x] ~~Transparency in rendering~~
-  - [x] ~~Collision handling~~
-  - [x] ~~Core maths: Vector, Quaternion~~
-    - [x] ~~Replace as much gl-matrix logic with this as possible, ideally all of it~~
-  - [x] ~~Picking / ray casting~~
-  - [x] ~~3D Animation including bones~~
-    - [x] ~~Rename a bunch of model stuff (such as? oh, like `MeshNode` and `SubMesh`)~~
-  - [x] ~~Turning on Test objects now produces a performance problem! (at least with wireframe enabled / ray casting)~~
-  - [x] ~~DrawDebug - what's the future here?~~
-  - [x] ~~? POSSIBLE BUG?: `addChild` recomputes transforms. What happens to transitive children e.g. `c.addChild(b); a.addChild(b);` - Does C update correctly?~~
-  - [x] ~~Sound and audio (PoC)~~
-  - [x] ~~Basic Input system~~
-  - [x] ~~Materials can be reused~~
-  - [x] ~~POC for gizmos~~
-    - [x] ~~Some way to render on a different "layer" (not to mention, UI?)~~
-    - [x] ~~Calculate bounding box of node/hierarchy~~
-  - [x] ~~Remaining material properties needed by PolyZone~~
-    - [x] ~~Reflection~~
-  - [x] ~~Directional light~~
-  - [x] ~~Redo ObjLoader~~
-  - [x] ~~Configurable number of max lights (not DYNAMIC but CONFIGURABLE)~~
-  - [x] ~~Remove old shaders~~
-  - [x] ~~Low-level API~~
-  - [x] ~~MATH API REFACTOR: Flip the order of math operators (e.g. `Matrix4.transform(Vector3)` instead of `Vector3.multiplySelf(Matrix4)`)~~
-  - [x] ~~Lights have range or intensity or colour or something.~~
-  - [x] ~~Config for Clear color on scene, or camera?~~
-  - [x] ~~Move ray casting into a class I think~~
-  - [x] ~~Fix DrawDebug~~
-  - [x] ~~Move AABB + others into `util/maths` or something~~
-  - [x] ~~Split up combined files~~
-    - [x] ~~vector.ts~~
-    - [x] ~~observable.ts~~
-    - [x] ~~____Geometry~~
-  - [x] ~~Build pipeline and CD~~
-  - [x] ~~Export everything from top-level import~~
-  - [x] ~~Maybe we just fold core into engine~~
-    - [x] ~~Remove hacks and aliases from typedoc / simplify config~~
-    - [x] ~~Copy files across~~
-    - [x] ~~Update code that references `@lopoly/engine`~~
-    - [x] ~~Remove references / complex config from tsconfig(s)~~
-    - [x] ~~unpublish @lopoly/core from npm~~
-    - [x] ~~example projects / code samples in docs~~
-    - [x] ~~Build / publish scripts~~
-    - [x] ~~Delete `core/`~~
-    - [x] ~~? `common/` too?~~
-    - [x] ~~Update Release GH workflow~~
-    - [x] ~~eslint settings.json~~
-    - [x] ~~validate-versions.js needs some renames and stuff~~
-    - [x] ~~package.json simplification (?) / repository property~~
-  - [x] ~~Review TODOs and clean up documentation / repo~~
-    - [x] ~~Rewrite this README (move backlogs to TODO.md or something)~~
-    - [x] ~~Check / redo metadata in package.json (descriptions need work)~~
-    - [x] ~~Read through backlogs, remove done/old stuff, assemble rough milestones / priorities~~
-    - [x] ~~Look through TODOs in the code for any more milestone stuff~~
-  - [x] ~~Set a proper license on LoPoly~~
-  - [x] ~~Tidy up development example so we don't just have permanently uncommitted changes~~
+## PolyZone milestone (0.1.1?)
+- [x] ~~Align constructors for Color3 and Color4 - furthermore, maybe everything should take an Xlike as a constructor arg / use this to implement clone()~~
+- [x] ~~Load cubemaps (of differing layouts) from buffer (to utilise PolyZone AssetCache)~~
+- [ ] load gltf .bin as dependency
+- [ ] ModelNode should be able to have no model (?) - or defer to PolyZone
+- [ ] Dithering or support for custom shaders
 
 ## Milestone: 0.2 - "First job after uni"
   - [ ] Tidy up light attenuation shader code
@@ -86,6 +31,7 @@
   - [ ] Make sure all tmp values are called `tmp_<thing>_<purpose>` and are static where possible
   - [ ] Remove debug input debug_allKnownKeyCodes
   - [ ] Dog fooding: Are .objs importing properly?
+  - [ ] Update code example in README to have nice imports
 
 ## Milestone: 0.3 - "Squashinembugs"
   - [ ] Camera should infer its aspect ratio, it shouldn't be a param
@@ -148,3 +94,14 @@ These items are roughly in priority order.
   - Use Computed to cache `CameraNode.projectionMatrix`
   - Remove or promote `Computed.debug_name`
   - Think about gamma vs linear colour encoding (e.g. doing maths with Color3 vs displaying Color3)
+
+## Not yet categorised
+- ModelNode's creation of a model "instance" (basically a clone) is a bit whack.
+  - For example, `nodeA.model === nodeB.model` will return false
+  - We should consider introducing a concept called "ModelInstance" and/or preserving the reference to the original param (it currently is discarded)
+
+### Feedback from PolyZone integration
+- Add `tabIndex` to canvas - it is a prerequisite for input working
+- Does LoPoly need to emit "esm" compatible JS with extensions in the imports?
+- Should the LoPoly userland script loop happen after the native loop or before? e.g. PolyZone calls `pointAt()` => cameras have already updated, won't point until next frame.
+- Validate params for javascript callers
