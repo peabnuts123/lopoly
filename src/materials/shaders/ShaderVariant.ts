@@ -1,15 +1,10 @@
-import  type { Enum } from '@lopoly/engine/util/types';
-import  { CameraUboIndex } from '@lopoly/engine/scene/nodes/CameraNode';
-import  { LightingUboIndex } from '@lopoly/engine/scene/SceneLighting';
-import  type { IEngine } from '@lopoly/engine/Engine';
+import { CameraUboIndex } from '@lopoly/engine/scene/nodes/CameraNode';
+import { LightingUboIndex } from '@lopoly/engine/scene/SceneLighting';
+import type { IEngine } from '@lopoly/engine/Engine';
 
 import { ShaderBlendingMode } from './ShaderBlendingMode';
-
-export type ShaderType = Enum<typeof ShaderType>;
-export const ShaderType = {
-  FRAGMENT_SHADER: 0x8B30,
-  VERTEX_SHADER: 0x8B31,
-} as const;
+import type { IShader } from './IShader';
+import { ShaderType } from './ShaderType';
 
 export interface ShaderVariantOptions {
   hasDiffuseColor: boolean;
@@ -118,84 +113,5 @@ export class ShaderVariant {
     }
 
     return uniform;
-  }
-}
-
-export interface IShader {
-  get vertexShaderSource(): string;
-  get fragmentShaderSource(): string;
-  getDefines(engine: IEngine, options: ShaderVariantOptions): string[];
-}
-
-export class DefaultShader implements IShader {
-  public readonly vertexShaderSource: string;
-  public readonly fragmentShaderSource: string;
-
-  public constructor(
-    vertexShaderSource: string,
-    fragmentShaderSource: string,
-  ) {
-    this.vertexShaderSource = vertexShaderSource;
-    this.fragmentShaderSource = fragmentShaderSource;
-  }
-
-  getDefines(engine: IEngine, options: ShaderVariantOptions): string[] {
-    const defines: string[] = [];
-
-    if (options.hasDiffuseColor) {
-      defines.push('DIFFUSE_COLOR');
-    }
-
-    if (options.hasVertexColors) {
-      defines.push('VERTEX_COLORS');
-    }
-
-    if (options.hasSkin) {
-      defines.push('SKIN', 'MAX_BONES ' + engine.config.models.maxBones);
-    }
-
-    if (options.hasDiffuseTexture) {
-      defines.push('DIFFUSE_TEXTURE');
-    }
-
-    if (options.blendingMode) {
-      switch (options.blendingMode.type) {
-        case 'None':
-          /* No blending, will set alpha = 1.0 in shader by default */
-          break;
-        case 'Average':
-          /* Averaged blending. Transparent pixels set to alpha=0.5f for blending */
-          defines.push('FIXED_TRANSPARENCY_ALPHA 0.5f');
-          break;
-        case 'Additive':
-          /* Additive blending. Transparent pixels set to alpha=0.0f for blending */
-          defines.push('FIXED_TRANSPARENCY_ALPHA 0.0f');
-          break;
-        case 'Subtractive':
-          /* Subtractive blending. Transparent pixels set to alpha=0.0f for blending */
-          defines.push('FIXED_TRANSPARENCY_ALPHA 0.0f');
-          break;
-        case 'AlphaBlend':
-          /* Alpha blend. Do not manipulate shader output alpha */
-          defines.push('ALPHA_BLENDING');
-          break;
-        case 'AlphaClip':
-          /* Alpha clip. Pixels with alpha less than the cutoff are discarded, otherwise rendered as opaque */
-          defines.push('ALPHA_CLIPPING');
-          break;
-        default:
-          throw new Error(`Unimplemented blending mode: '${(options.blendingMode as { type: unknown }).type}'`);
-      }
-    }
-
-    if (options.unlit) {
-      defines.push("UNLIT");
-    }
-
-    if (options.hasReflection) {
-      defines.push(`REFLECTION`);
-    }
-
-    return defines;
   }
 }

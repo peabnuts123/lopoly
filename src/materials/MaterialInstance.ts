@@ -1,14 +1,12 @@
-import  { IdPool } from '@lopoly/engine/util/IdPool';
-import  { Color4 } from '@lopoly/engine/math/Color4';
-import  { Texture, Cubemap } from '@lopoly/engine/textures';
+import { IdPool } from '@lopoly/engine/util/IdPool';
+import { Color4 } from '@lopoly/engine/math/Color4';
+import { Texture, Cubemap } from '@lopoly/engine/textures';
+import { clamp01 } from '@lopoly/engine/math/util';
 
-import  VertexShaderSource from '@lopoly/engine/materials/shaders/shader.vert';
-import  FragmentShaderSource from '@lopoly/engine/materials/shaders/shader.frag';
-
-import { ShaderBlendingMode } from './ShaderBlendingMode';
-import { DefaultShader, type IShader } from './ShaderVariant';
 import { Material } from './Material';
-import  { clamp01 } from '@lopoly/engine/math/util';
+import { ShaderBlendingMode } from './shaders/ShaderBlendingMode';
+import type { IShader } from './shaders/IShader';
+import { DefaultShaderInstance } from './shaders/DefaultShader';
 
 export const MaterialDefaults = {
   unlit: false,
@@ -19,10 +17,6 @@ export const MaterialDefaults = {
   reflectionIntensity: 0.5,
 };
 
-const DefaultShaderInstance = new DefaultShader(
-  VertexShaderSource,
-  FragmentShaderSource,
-);
 export class MaterialInstance {
   private static readonly IdPool: IdPool = new IdPool();
   public static readonly DefaultMaterial = MaterialInstance.fromMaterial(Material.DefaultMaterial);

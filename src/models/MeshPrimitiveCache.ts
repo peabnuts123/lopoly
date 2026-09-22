@@ -1,9 +1,9 @@
-import  type { IEngine } from "@lopoly/engine/Engine";
+import type { IEngine } from "@lopoly/engine/Engine";
 import type {
   MeshPrimitiveDefinition,
 } from "@lopoly/engine/loaders/definitions";
-import  { MaterialInstance } from "@lopoly/engine/materials/MaterialInstance";
-import  { ShaderBlendingModeTypeEnumValue } from "@lopoly/engine/materials/ShaderBlendingMode";
+import { MaterialInstance } from "@lopoly/engine/materials/MaterialInstance";
+import { ShaderBlendingModeTypeEnumValue } from "@lopoly/engine/materials/shaders/ShaderBlendingMode";
 
 import { MeshPrimitive } from "./MeshPrimitive";
 import { MeshPrimitiveGeometry } from "./geometry";

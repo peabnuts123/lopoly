@@ -3,9 +3,9 @@
 ## PolyZone milestone (0.1.1?)
 - [x] ~~Align constructors for Color3 and Color4 - furthermore, maybe everything should take an Xlike as a constructor arg / use this to implement clone()~~
 - [x] ~~Load cubemaps (of differing layouts) from buffer (to utilise PolyZone AssetCache)~~
-- [ ] load gltf .bin as dependency
-- [ ] ModelNode should be able to have no model (?) - or defer to PolyZone
-- [ ] Dithering or support for custom shaders
+- [x] ~~load gltf .bin as dependency~~
+<!-- - [ ] ModelNode should be able to have no model (?) - or defer to PolyZone -->
+- [x] ~~Dithering or support for custom shaders~~
 
 ## Milestone: 0.2 - "First job after uni"
   - [ ] Tidy up light attenuation shader code

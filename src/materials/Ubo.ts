@@ -1,9 +1,8 @@
 import  { createBuffer, BufferType } from "@lopoly/engine/util/createBuffer";
 import  type { IEngine } from "@lopoly/engine/Engine";
 
-import  VertexShaderSource from '@lopoly/engine/materials/shaders/shader.vert';
-import  FragmentShaderSource from '@lopoly/engine/materials/shaders/shader.frag';
-import { DefaultShader, ShaderVariant } from "./ShaderVariant";
+import { ShaderVariant } from "./shaders/ShaderVariant";
+import { DefaultShaderInstance } from "./shaders/DefaultShader";
 
 
 interface UboBufferProperty {
@@ -23,10 +22,8 @@ export class Ubo<TPropertyName extends string> {
     // all shaders and present in the default shader.
     // This is a somewhat brittle assumption, but will work for now. In the future,
     // we may have to develop a more sophisticated, robust system for UBOs.
-    const referenceShader = new ShaderVariant(engine, -1, new DefaultShader(
-      VertexShaderSource,
-      FragmentShaderSource,
-    ));
+    // @TODO This assumption will break for custom shaders.
+    const referenceShader = new ShaderVariant(engine, -1, DefaultShaderInstance);
 
     // Look up UBO size in bytes
     const blockIndex = gl.getUniformBlockIndex(referenceShader.program, uboName);

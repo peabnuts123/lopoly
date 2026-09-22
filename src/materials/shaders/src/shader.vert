@@ -131,42 +131,19 @@ void main() {
       vec3 lightVector = pointLightPositions[i].xyz - worldPosition;
       float lightDistanceSqr = dot(lightVector, lightVector);
 
-// @TODO REMOVE ALL THESE OTHER OPTIONS, just committing for posterity
-      // // Cut off light after max range, or at distance = 0
-      if(lightDistanceSqr > 0.0f /* && lightDistanceSqr <= lightRangeSqr */) {
+      if(lightDistanceSqr > 0.0f) {
         float lightDistance = sqrt(lightDistanceSqr);
         vec3 lightDir = normalize(lightVector);
         float intensity = pointLightIntensities[i].x * max(dot(worldNormal, lightDir), 0.0f);
 
-        // @NOTE Classic GL lighting formula:
+        // @NOTE Classic GL lighting attenuating formula:
         //  Attenuation = 1 / (K_c + K_l * d + K_q * d^2)
         // d   = Distance to light source
         // K_c = Constant lighting coefficient
         // K_l = Linear lighting coefficient
         // K_q = Quadratic lighting coefficient
-        // @NOTE GL Compliant
-        // float coefficientQuadratic = 1.0f / (2.0 * LIGHTING_INTENSITY_AT_MAX_RANGE * lightRangeSqr);
         float coefficientQuadratic = ((1.0f / LIGHTING_INTENSITY_AT_MAX_RANGE) - 1.0f) / lightRangeSqr;
         fragmentLighting += (intensity * pointLightColors[i].rgb) / (LIGHTING_COEFFICIENT_CONSTANT + LIGHTING_COEFFICIENT_LINEAR * lightDistance + coefficientQuadratic * lightDistanceSqr);
-
-        // @NOTE GL Compliant "half range"
-        // float coefficientQuadratic = 1.0f / lightRangeSqr;
-        // fragmentLighting += (intensity * pointLightColors[i].rgb) / (LIGHTING_COEFFICIENT_CONSTANT + LIGHTING_COEFFICIENT_LINEAR * lightDistance + coefficientQuadratic * lightDistanceSqr);
-
-        // @NOTE Other guy's
-        // float s = lightDistance / lightRange;
-        // float Q = 3.0f;
-        // fragmentLighting += (intensity * pointLightColors[i].rgb) * ((1.0f - s * s) * (1.0f - s * s)) / (1.0f + Q * s);
-
-        // @NOTE QUADRATIC
-        // fragmentLighting += (intensity * pointLightColors[i].rgb) * ((lightDistanceSqr/lightRangeSqr) - (2.0f * lightDistance / lightRange) + 1.0f);
-
-        // @NOTE LINEAR
-        // fragmentLighting += (intensity * pointLightColors[i].rgb) * (-lightDistance / lightRange + 1.0f);
-
-        // @NOTE CUTOFF
-        // float intensity = max(dot(worldNormal, lightDir), 0.0f);
-        // fragmentLighting += (intensity * pointLightColors[i].rgb);
       }
     }
   }

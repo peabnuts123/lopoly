@@ -4,7 +4,7 @@ import  { Texture, Cubemap } from '@lopoly/engine/textures';
 import  type { IEngine } from '@lopoly/engine/Engine';
 import  type { MaterialDefinition } from '@lopoly/engine/loaders/definitions';
 
-import { ShaderBlendingMode } from './ShaderBlendingMode';
+import { ShaderBlendingMode } from './shaders/ShaderBlendingMode';
 
 export type Unset = 'unset';
 

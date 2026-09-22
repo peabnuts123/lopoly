@@ -2,9 +2,9 @@ import { Vector3 } from "@lopoly/engine/math/Vector3";
 import type { Matrix4 } from "@lopoly/engine/math/Matrix4";
 import { IdPool } from "@lopoly/engine/util/IdPool";
 import { type DrawTask, type IEngine, type OpaqueDrawTask, type TransparentDrawTask } from "@lopoly/engine/Engine";
-import { ShaderCache } from "@lopoly/engine/materials/ShaderCache";
 import { MaterialInstance } from "@lopoly/engine/materials/MaterialInstance";
-import type { ShaderVariant } from "@lopoly/engine/materials/ShaderVariant";
+import { type ShaderVariant } from "@lopoly/engine/materials/shaders/ShaderVariant";
+import { ShaderCache } from "@lopoly/engine/materials/shaders/ShaderCache";
 import { BufferType } from "@lopoly/engine/util/createBuffer";
 import type { MeshPrimitiveGeometry } from "./geometry";
 
