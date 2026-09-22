@@ -68,17 +68,14 @@ export const MeshPrimitiveMode = {
 } as const;
 
 export interface ModelDefinitionDependency {
+  type: 'texture' | 'material' | 'other',
   path: string;
   file: VirtualFile;
 }
 export interface ModelDefinition {
   rootParts: ModelPartDefinition[];
-  animations: AnimationDefinition[]; // @TODO nullable
-  // @TODO Consider exposing all the materials in a flat list
-  dependencies?: {
-    textures?: ModelDefinitionDependency[];
-    // @TODO non-texture dependencies (e.g. .bin, .mtl)
-  },
+  animations: AnimationDefinition[];
+  dependencies: ModelDefinitionDependency[],
 }
 
 export interface TransformDefinition {

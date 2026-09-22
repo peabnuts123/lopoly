@@ -9,15 +9,15 @@ import {
 } from 'online-3d-viewer/source/engine/import/importerobj';
 import { MaterialSource } from 'online-3d-viewer';
 
-import  { Vector3, type Vector3Like } from '@lopoly/engine/math/Vector3';
-import  type { Vector2Like } from '@lopoly/engine/math';
-import  { Quaternion } from '@lopoly/engine/math/Quaternion';
-import  { Color4 } from '@lopoly/engine/math/Color4';
-import  { canonicalisePath, getFileExtension } from '@lopoly/engine/util/path';
-import  type { Color3Like } from '@lopoly/engine/math/Color3';
-import  type { IFileSystem, VirtualFile } from '@lopoly/engine/filesystem';
-import  { Texture } from '@lopoly/engine/textures';
-import  { AxisAlignedBoundingBox } from '@lopoly/engine/collision';
+import { Vector3, type Vector3Like } from '@lopoly/engine/math/Vector3';
+import type { Vector2Like } from '@lopoly/engine/math';
+import { Quaternion } from '@lopoly/engine/math/Quaternion';
+import { Color4 } from '@lopoly/engine/math/Color4';
+import { canonicalisePath, getFileExtension } from '@lopoly/engine/util/path';
+import type { Color3Like } from '@lopoly/engine/math/Color3';
+import type { IFileSystem, VirtualFile } from '@lopoly/engine/filesystem';
+import { Texture } from '@lopoly/engine/textures';
+import { AxisAlignedBoundingBox } from '@lopoly/engine/collision';
 
 import {
   AccessorComponentType,
@@ -50,9 +50,7 @@ export class ObjLoader {
     const knownFiles: Record<string, Uint8Array> = {};
     let newFilePaths: string[] = [];
     let parsedObj: ModelObj;
-    const dependencies = {
-      textures: [] as ModelDefinitionDependency[],
-    };
+    const dependencies: ModelDefinitionDependency[] = [];
 
     // @NOTE `online-3d-viewer` loader is not async, so we have to work around it :/
     // Re-parse .obj repeatedly until we've successfully parsed all dependencies (e.g. .mtl, or textures)
@@ -84,9 +82,16 @@ export class ObjLoader {
         ));
         for (const { path, file } of newFiles) {
           const fileExt = getFileExtension(path).toLocaleLowerCase();
-          if (fileExt !== '.mtl') {
-            // @TODO More robust, explicit list of supported file extensions / header bytes
-            dependencies.textures.push({
+          // @TODO More robust, explicit list of supported file extensions / header bytes
+          if (fileExt === '.mtl') {
+            dependencies.push({
+              type: 'material',
+              path,
+              file,
+            });
+          } else {
+            dependencies.push({
+              type: 'texture',
               path,
               file,
             });

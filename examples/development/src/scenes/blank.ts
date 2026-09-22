@@ -44,6 +44,7 @@ export abstract class Game {
     const cubeModel = await Model.fromDefinition(engine, {
       rootParts: [debugGeometry.simplePart({ name: 'cube' })],
       animations: [],
+      dependencies: [],
     });
 
     /* Scene */

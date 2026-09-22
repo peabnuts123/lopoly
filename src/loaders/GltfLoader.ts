@@ -1,15 +1,15 @@
 
 import { Accessor, WebIO, type GLTF, Node as GltfPart, Document, Material } from '@gltf-transform/core';
 
-import  { Matrix4 } from '@lopoly/engine/math/Matrix4';
-import  { Vector3 } from '@lopoly/engine/math/Vector3';
-import  { Vector2 } from '@lopoly/engine/math/Vector2';
-import  { Quaternion } from '@lopoly/engine/math/Quaternion';
-import  { Color4 } from '@lopoly/engine/math/Color4';
-import  { canonicalisePath } from '@lopoly/engine/util/path';
-import  type { IFileSystem } from '@lopoly/engine/filesystem';
-import  { mapBufferChunks } from '@lopoly/engine/util/array';
-import  { AxisAlignedBoundingBox } from '@lopoly/engine/collision';
+import { Matrix4 } from '@lopoly/engine/math/Matrix4';
+import { Vector3 } from '@lopoly/engine/math/Vector3';
+import { Vector2 } from '@lopoly/engine/math/Vector2';
+import { Quaternion } from '@lopoly/engine/math/Quaternion';
+import { Color4 } from '@lopoly/engine/math/Color4';
+import { canonicalisePath } from '@lopoly/engine/util/path';
+import type { IFileSystem } from '@lopoly/engine/filesystem';
+import { mapBufferChunks } from '@lopoly/engine/util/array';
+import { AxisAlignedBoundingBox } from '@lopoly/engine/collision';
 
 import {
   AccessorComponentType,
@@ -85,7 +85,7 @@ export abstract class GltfLoader {
 
     const io = new WebIO({ credentials: 'include' });
 
-    const textureDependencies: ModelDefinitionDependency[] = [];
+    const modelDependencies: ModelDefinitionDependency[] = [];
 
     let document: Document;
     if (isGlb) {
@@ -108,7 +108,14 @@ export abstract class GltfLoader {
         const file = await filesystem.readFile(path);
 
         if (kind === 'image') {
-          textureDependencies.push({
+          modelDependencies.push({
+            type: 'texture',
+            path,
+            file,
+          });
+        } else {
+          modelDependencies.push({
+            type: 'other',
             path,
             file,
           });
@@ -563,9 +570,7 @@ export abstract class GltfLoader {
     return changeYUpModelDefinitionToZUp({
       rootParts: rootPartDefinitions,
       animations: allAnimationDefinitions,
-      dependencies: {
-        textures: textureDependencies,
-      },
+      dependencies: modelDependencies,
     });
   }
 }
