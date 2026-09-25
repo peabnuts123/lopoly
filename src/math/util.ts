@@ -76,6 +76,10 @@ export function randInt(min: number, max: number): number {
   max = max < 0 ? Math.floor(max) : Math.ceil(max);
   return Math.trunc(Math.random() * (max - min) + min);
 }
+/** Choose a random element from an array. */
+export function chooseRandom<T>(items: T[]): T {
+  return items[randInt(0, items.length)];
+}
 
 
 /**
