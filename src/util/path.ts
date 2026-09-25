@@ -23,11 +23,17 @@ export function canonicalisePath(path: string, stripProtocol: boolean = false): 
     new URL(path, 'http://foo.bar').pathname,
   );
 
+  // Split into segments for processing
+  const parts = canonical.split('/')
+    .filter((part) => part.trim() !== ''); // Remove empty segments
+
+  const result = parts.join('/');
+
   // Trim leading slash if path was relative
   if (path.startsWith('/')) {
-    return canonical;
+    return '/' + result;
   } else {
-    return canonical.replace(/^\//, '');
+    return result;
   }
 }
 
