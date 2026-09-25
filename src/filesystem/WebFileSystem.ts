@@ -1,3 +1,4 @@
+import { canonicalisePath } from "../util";
 import type { IFileSystem } from "./IFileSystem";
 import { VirtualFile } from "./VirtualFile";
 
@@ -18,9 +19,9 @@ export class WebFileSystem implements IFileSystem {
     );
   }
 
-   private getUrlForPath(path: string): string {
+  private getUrlForPath(path: string): string {
     if (this.fileSystemPrefix) {
-      return `${this.fileSystemPrefix}/${path}`;
+      return canonicalisePath(this.fileSystemPrefix + '/' + canonicalisePath(path));
     } else {
       return path;
     }
