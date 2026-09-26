@@ -35,6 +35,11 @@ layout(std140) uniform Camera {
   highp vec3 cameraPosition;
 };
 
+#ifdef DITHER
+vec3 dither(vec3 color, ivec2 screen);
+#endif
+
+
 void main() {
 #ifdef DIFFUSE_TEXTURE
   vec4 sampledColor = texture(diffuseTextureSampler, fragmentTextureCoord);
@@ -63,11 +68,49 @@ void main() {
   // Alpha blending (outputColor.a remains untouched)
 #elif defined(ALPHA_CLIPPING)
   // Alpha clipping
-  if (outputColor.a < alphaCutoff) {
+  if(outputColor.a < alphaCutoff) {
     discard;
   }
 #else
   // Pixel is opaque
   outputColor.a = 1.0f;
 #endif
+
+#ifdef DITHER
+  outputColor.rgb = dither(outputColor.rgb, ivec2(gl_FragCoord.xy));
+#endif
 }
+
+#ifdef DITHER
+mat4 dither_table=mat4
+(
+   0,  8,  2, 10,
+  12,  4, 14,  6,
+   3, 11,  1,  9,
+  15,  7, 13,  5
+);
+vec3 dither(vec3 color, ivec2 screen) {
+  // Color config
+  float numColourBands = float(1 << DITHER_BITS_PER_CHANNEL);
+  float maxValue = numColourBands - 1.0f;
+
+  // Sample dither table
+  float dither = dither_table[screen.y % 4][screen.x % 4];
+  // Compute dither offset - a value between -0.5 (inclusive) and 0.5 (exclusive)
+  float ditherOffset = (dither / 16.0f) - 0.5f;
+
+  // Scale normalized colour into N-bit colour, add dither offset,
+  // then floor the result (compress into N colour bands).
+  // This shifts the colour within the range of 1 colour band
+  // Clamp for sanity, even though GL should handle this anyway.
+  color = clamp(
+    floor(color * numColourBands + ditherOffset),
+    0.0f,
+    maxValue
+  );
+
+  // Scale back to normalized [0,1] domain
+  return color / maxValue;
+}
+
+#endif

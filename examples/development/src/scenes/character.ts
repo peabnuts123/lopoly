@@ -105,6 +105,7 @@ export abstract class Game {
     const cubeModel = await Model.fromDefinition(engine, {
       rootParts: [debugGeometry.simplePart({ name: 'cube' })],
       animations: [],
+      dependencies: [],
     });
     const rigDefinition = await GltfLoader.loadModel('/models/Rig_Medium_MovementBasic.glb', fileSystem);
     const playerModelDefinition = await GltfLoader.loadModel('/models/rig_mage.glb', fileSystem);

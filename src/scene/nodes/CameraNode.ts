@@ -1,4 +1,4 @@
-import { Vector3 } from "@lopoly/engine/math/Vector3";
+import { Vector3, type Vector3Like } from "@lopoly/engine/math/Vector3";
 import { DegreesToRadians } from "@lopoly/engine/math/util";
 import { Matrix4 } from "@lopoly/engine/math/Matrix4";
 import type { Ubo } from "@lopoly/engine/materials/Ubo";
@@ -54,7 +54,7 @@ export class CameraNode extends SceneNode {
   }
 
   private tmp_pointAt = Vector3.zero();
-  public pointAt(target: Vector3): void {
+  public pointAt(target: Vector3Like): void {
     this.tmp_pointAt
       .setValue(target)
       .subtractSelf(this.absolutePosition);

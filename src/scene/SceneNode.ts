@@ -30,13 +30,13 @@ export abstract class SceneNode {
    * @param fn - The callback function to execute for each child
    * @param recursive - Whether to iterate recursively through the entire hierarchy or just this SceneNode's direct children.
    */
-  public forEachChild(fn: (child: SceneNode) => void, recursive?: boolean): void {
+  public forEachChild(fn: (child: SceneNode) => void, recursive: boolean = false): void {
     this.transform.forEachChild((childTransform) => {
       fn(childTransform.node);
     }, recursive);
   }
 
-  public findChild(fn: (child: SceneNode) => boolean, recursive?: boolean): SceneNode | undefined {
+  public findChild(fn: (child: SceneNode) => boolean, recursive: boolean = false): SceneNode | undefined {
     return this.transform.findChild((childTransform) => {
       return fn(childTransform.node);
     }, recursive)?.node;

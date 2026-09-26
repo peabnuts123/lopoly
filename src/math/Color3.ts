@@ -1,4 +1,4 @@
-import  { Observable } from "@lopoly/engine/util/Observable";
+import { Observable } from "@lopoly/engine/util/Observable";
 import { Color4 } from "./Color4";
 import { clamp } from "./util";
 
@@ -32,12 +32,25 @@ export interface IReadonlyColor3 {
 export class Color3 extends Observable implements IReadonlyColor3 {
   private readonly internal: Color3InternalBuffer;
 
-  public constructor(r: number, g: number, b: number) {
+  public constructor(color: Color3Like);
+  public constructor(r: number, g: number, b: number);
+  public constructor(rOrColor: number | Color3Like, maybeG?: number, maybeB?: number) {
     super();
     this.internal = new Color3InternalBuffer();
-    this.internal.r = r;
-    this.internal.g = g;
-    this.internal.b = b;
+    if (typeof rOrColor === 'number') {
+      if (typeof maybeG === 'number' && typeof maybeB === 'number') {
+        /* RGB */
+        this.internal.r = rOrColor;
+        this.internal.g = maybeG;
+        this.internal.b = maybeB;
+      } else throw new Error(`Unrecognised parameters to ${Color3.name}`);
+    } else {
+      /* Color3 */
+      const color = rOrColor;
+      this.internal.r = color.r;
+      this.internal.g = color.g;
+      this.internal.b = color.b;
+    }
   }
 
   public scaleSelf(factor: number): this {

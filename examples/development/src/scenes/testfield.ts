@@ -72,6 +72,7 @@ export abstract class Game {
           }),
         })],
         animations: [],
+        dependencies: [],
       },
       /* 01 - Real model */
       await GltfLoader.loadModel('/models/burger.glb', fileSystem),
@@ -86,6 +87,7 @@ export abstract class Game {
           }),
         })],
         animations: [],
+        dependencies: [],
       },
       /* 03 - Dumpster model */
       await GltfLoader.loadModel('/models/dumpster.glb', fileSystem),
@@ -104,6 +106,7 @@ export abstract class Game {
           }),
         })],
         animations: [],
+        dependencies: [],
       },
     ];
 

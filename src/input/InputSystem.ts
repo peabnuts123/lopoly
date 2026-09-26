@@ -1,4 +1,4 @@
-import  type { Enum } from "@lopoly/engine/util/types";
+import type { Enum } from "@lopoly/engine/util/types";
 import {
   GamepadAxis, type GamepadAxisValue,
   GamepadButton, type GamepadButtonValue,
@@ -175,6 +175,12 @@ export class InputSystem implements IInputSystem {
     canvas.addEventListener('mousewheel', (e) => this.onWheel(e as WheelEvent, false));
     window.addEventListener('gamepadconnected', (e) => this.onGamepadConnected(e));
     window.addEventListener('gamepaddisconnected', (e) => this.onGamepadDisconnected(e));
+
+    // @NOTE Legacy pointerlock API handles success / fail through event handling
+    document.addEventListener("pointerlockerror", () => {
+      this.onPointerLockError();
+    });
+
 
     canvas.addEventListener('contextmenu', (e) => {
       e.preventDefault();
@@ -463,9 +469,7 @@ export class InputSystem implements IInputSystem {
       this.state.isPointerLocked = true;
 
       // @NOTE This might fail. It will be retried on the next pointer event.
-      void this.canvas.requestPointerLock().catch((e) => {
-        console.warn(`Failed to request pointer lock. It will be retried on next player pointer interaction.`, e);
-      });
+      this.safeRequestPointerLock();
     }
   }
 
@@ -788,18 +792,31 @@ export class InputSystem implements IInputSystem {
     return this.configuration.axes?.find((axis) => axis.name === name);
   }
 
+  private safeRequestPointerLock(): void {
+    // @NOTE `requestPointerLock()` updated spec returns a promise, but not all
+    // user agents implement this yet. So we must also handle undefined + `pointerlockerror` event
+    const result = this.canvas.requestPointerLock();
+    if (result instanceof Promise) {
+      result.catch(() => {
+        console.warn(`[${InputSystem.name}] (${this.safeRequestPointerLock.name}) Failed to request pointer lock. It will be retried on next player pointer interaction.`);
+      });
+    }
+  }
+
   /**
    * Check whether the pointer lock state matches reality and attempt
    * to change it if it doesn't.
    */
   private ensurePointerLockIsCorrect(): void {
     if (this.state.isPointerLocked && !this.isPointerActuallyLocked && 'requestPointerLock' in this.canvas) {
-      void this.canvas.requestPointerLock().catch((e) => {
-        console.warn(`Failed to request pointer lock. It will be retried on next player pointer interaction.`, e);
-      });
+      this.safeRequestPointerLock();
     } else if (!this.state.isPointerLocked && this.isPointerActuallyLocked && 'exitPointerLock' in document) {
       document.exitPointerLock();
     }
+  }
+
+  private onPointerLockError(): void {
+    console.warn(`[${InputSystem.name}] (${this.onPointerLockError.name}) Failed to request pointer lock. It will be retried on next player pointer interaction.`);
   }
 
   /**

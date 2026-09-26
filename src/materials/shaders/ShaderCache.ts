@@ -3,7 +3,7 @@ import  type { IEngine } from '@lopoly/engine/Engine';
 import  type { MeshPrimitiveGeometry } from '@lopoly/engine/models/geometry';
 
 import { ShaderVariant } from './ShaderVariant';
-import { MaterialInstance } from './MaterialInstance';
+import { MaterialInstance } from '../MaterialInstance';
 import { ShaderBlendingModeTypeEnumValue } from './ShaderBlendingMode';
 
 export class ShaderCache {

@@ -1,4 +1,4 @@
-import  { Observable } from "@lopoly/engine/util/Observable";
+import { Observable } from "@lopoly/engine/util/Observable";
 
 import type { IReadonlyVector2, Vector2, Vector2Like } from "./Vector2";
 
@@ -45,12 +45,25 @@ class Vector3InternalBuffer {
 export class Vector3 extends Observable implements IReadonlyVector3 {
   protected internal: Vector3InternalBuffer;
 
-  public constructor(x: number, y: number, z: number) {
+  public constructor(color: Vector3Like);
+  public constructor(x: number, y: number, z: number);
+  public constructor(xOrVector: number | Vector3Like, maybeY?: number, maybeZ?: number) {
     super();
     this.internal = new Vector3InternalBuffer();
-    this.internal.x = x;
-    this.internal.y = y;
-    this.internal.z = z;
+    if (typeof xOrVector === 'number') {
+      if (typeof maybeY === 'number' && typeof maybeZ === 'number') {
+        /* XYZ */
+        this.internal.x = xOrVector;
+        this.internal.y = maybeY;
+        this.internal.z = maybeZ;
+      } else throw new Error(`Unrecognised parameters to ${Vector3.name}`);
+    } else {
+      /* Vector3 */
+      const vector = xOrVector;
+      this.internal.x = vector.x;
+      this.internal.y = vector.y;
+      this.internal.z = vector.z;
+    }
   }
 
   public setValue(x: number, y: number, z: number): this;

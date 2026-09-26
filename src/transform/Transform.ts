@@ -214,26 +214,22 @@ export class Transform<T extends TransformNodeTarget> {
 
   /**
    * Add a child node to this node.
-   * Unless {@linkcode preserveLocalTransform} is set, the child's local transform values
-   * will be recalculated to preserve its absolute transform values.
+   * The child's local transform values will be recalculated to preserve its absolute transform values.
    *
    * @param child - The child node to add
-   * @param preserveLocalTransform - Whether to preserve the child's local transform when reparenting
    * @throws {Error} If the child already has a different parent
    */
-  private addChild(child: Transform<T>, preserveLocalTransform: boolean = false): void {
+  private addChild(child: Transform<T>): void {
     if (this.children.some((existingChild) => existingChild === child)) {
       console.warn(`Tried to add transform '${child.node.name}' as child of transform '${this.node.name}' but it is already a child of this node`);
     } else if (child.parent !== undefined) {
       throw new Error(`Cannot add transform '${child.node.name}' as child of transform '${this.node.name}': It is already the child of another transform: '${child.parent.node.name}'`);
     } else {
-      if (!preserveLocalTransform) {
-        // Ensure absolute properties are up to date, as we will immediately
-        // use them to recompute local properties after reparenting
-        child._absolutePosition.forceRecompute();
-        child._absoluteRotation.forceRecompute();
-        child._absoluteScale.forceRecompute();
-      }
+      // Ensure absolute properties are up to date, as we will immediately
+      // use them to recompute local properties after reparenting
+      child._absolutePosition.forceRecompute();
+      child._absoluteRotation.forceRecompute();
+      child._absoluteScale.forceRecompute();
 
       // Set parent
       this.children.push(child);
@@ -252,12 +248,10 @@ export class Transform<T extends TransformNodeTarget> {
         this._absoluteScale,
       );
 
-      if (!preserveLocalTransform) {
-        // Force recalculate child local position/rotation/scale
-        child._absolutePosition.forceWriteBack();
-        child._absoluteRotation.forceWriteBack();
-        child._absoluteScale.forceWriteBack();
-      }
+      // Force recalculate child local position/rotation/scale
+      child._absolutePosition.forceWriteBack();
+      child._absoluteRotation.forceWriteBack();
+      child._absoluteScale.forceWriteBack();
     }
   }
 

@@ -52,6 +52,10 @@ export interface EngineConfig {
   readonly models: {
     readonly maxBones: number;
   },
+  readonly rendering: {
+    readonly fullScreenDither: boolean;
+    readonly fullScreenDitherBitsPerChannel: number;
+  }
 }
 export const DefaultEngineConfig = {
   audio: {
@@ -64,6 +68,10 @@ export const DefaultEngineConfig = {
   },
   models: {
     maxBones: 64,
+  },
+  rendering: {
+    fullScreenDither: false,
+    fullScreenDitherBitsPerChannel: 5,
   },
 } satisfies EngineConfig;
 
@@ -115,15 +123,20 @@ export class Engine implements IEngine {
 
     this.config = {
       audio: {
-        numChannels: options?.audio?.numChannels ?? DefaultEngineConfig.audio.numChannels,
+        ...DefaultEngineConfig.audio,
+        ...options?.audio,
       },
       lighting: {
-        maxPointLights: options?.lighting?.maxPointLights ?? DefaultEngineConfig.lighting.maxPointLights,
-        defaultPointLightRange: options?.lighting?.defaultPointLightRange ?? DefaultEngineConfig.lighting.defaultPointLightRange,
-        maxDirectionalLights: options?.lighting?.maxDirectionalLights ?? DefaultEngineConfig.lighting.maxDirectionalLights,
+        ...DefaultEngineConfig.lighting,
+        ...options?.lighting,
       },
       models: {
-        maxBones: options?.models?.maxBones ?? DefaultEngineConfig.models.maxBones,
+        ...DefaultEngineConfig.models,
+        ...options?.models,
+      },
+      rendering: {
+        ...DefaultEngineConfig.rendering,
+        ...options?.rendering,
       },
     };
 

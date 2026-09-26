@@ -27,7 +27,7 @@ export abstract class Game {
     scene.lighting.ambientColor = new Color3(30, 30, 30);
     scene.clearColour = Color3.black();
 
-    const runLoopHooks: Array<(dt: number) => void> = [];
+    const runLoopHooks: Array<(dt: number, time: number) => void> = [];
 
     /* Lighting */
     if (Flags.LightingEnabled) {
@@ -44,6 +44,7 @@ export abstract class Game {
     const cubeModel = await Model.fromDefinition(engine, {
       rootParts: [debugGeometry.simplePart({ name: 'cube' })],
       animations: [],
+      dependencies: [],
     });
 
     /* Scene */
@@ -55,7 +56,7 @@ export abstract class Game {
 
     /* Run */
     engine.run((dt, time, stop) => {
-      runLoopHooks.forEach((hook) => hook(dt));
+      runLoopHooks.forEach((hook) => hook(dt, time));
 
       if (time > MaxRuntimeSeconds) {
         stop();

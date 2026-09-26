@@ -1,5 +1,3 @@
-/* @TODO Rename to `utils.ts` */
-
 export const Pi = Math.PI;
 export const Tau = Pi * 2;
 
@@ -77,6 +75,10 @@ export function randInt(min: number, max: number): number {
   min = min < 0 ? Math.floor(min) : Math.ceil(min);
   max = max < 0 ? Math.floor(max) : Math.ceil(max);
   return Math.trunc(Math.random() * (max - min) + min);
+}
+/** Choose a random element from an array. */
+export function chooseRandom<T>(items: T[]): T {
+  return items[randInt(0, items.length)];
 }
 
 
