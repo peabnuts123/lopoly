@@ -1,10 +1,10 @@
-import  { CollisionSystem } from "@lopoly/engine/collision";
-import  type { EngineConfig, IEngine, OnUpdateFn } from "@lopoly/engine/Engine";
-import  type { IFileSystem } from "@lopoly/engine/filesystem";
-import  type { IScene } from "@lopoly/engine/scene";
-import  { type IAudioSystem } from "@lopoly/engine/audio/AudioSystem";
-import  { type IInputSystem } from "@lopoly/engine/input";
-import  { type IDebugDraw } from "@lopoly/engine/util/DebugDraw";
+import { CollisionSystem } from "@lopoly/engine/collision";
+import type { EngineConfig, IEngine, OnUpdateFn } from "@lopoly/engine/Engine";
+import type { IFileSystem } from "@lopoly/engine/filesystem";
+import type { IScene } from "@lopoly/engine/scene";
+import { type IAudioSystem } from "@lopoly/engine/audio/AudioSystem";
+import { type IInputSystem } from "@lopoly/engine/input";
+import { type IDebugDraw } from "@lopoly/engine/util/DebugDraw";
 import { MockFileSystem } from "./MockFileSystem";
 import { MockAudioSystem } from './MockAudioSystem';
 import { MockInputSystem } from "./MockInputSystem";
@@ -40,6 +40,10 @@ export class MockEngine implements IEngine {
       },
       models: {
         maxBones: 64,
+      },
+      rendering: {
+        fullScreenDither: false,
+        fullScreenDitherBitsPerChannel: 5,
       },
     };
     this.audioSystem = new MockAudioSystem();
