@@ -30,6 +30,40 @@ jobs:
       - name: Lint, test, and build
         run: npm run checkall
 
+  debug-preview-release-notes:
+    runs-on: ubuntu-latest
+    name: (DEBUG) Preview Release Notes
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Find previous release tag
+        id: previous-tag
+        run: echo "tag=$(git describe --tags --abbrev=0 --match 'v*' HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Generate release notes
+        id: changelog
+        uses: requarks/changelog-action@v1
+        with:
+          token: ${{ github.token }}
+          fromTag: ${{ github.event.pull_request.head.sha }}
+          toTag: ${{ steps.previous-tag.outputs.tag }}
+          writeToFile: false
+          includeInvalidCommits: true
+          excludeTypes: ''
+          includeRefIssues: false
+          useGitmojis: false
+
+      - name: Print release notes
+        env:
+          CHANGES: ${{ steps.changelog.outputs.changes }}
+        run: |
+          echo '::group::Generated release notes'
+          printf '%s\n' "$CHANGES"
+          echo '::endgroup::'
+
   check-examples:
     runs-on: ubuntu-latest
     name: Check Examples
