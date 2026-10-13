@@ -27,6 +27,12 @@ export class MockEngine implements IEngine {
 
   public constructor({ fileSystem }: MockEngineConstructorArgs = {}) {
     this.gl = createMockWebGLContext();
+
+    // @NOTE Prevent Vitest from enumerating `gl` when trying to serialize MockEngine for diff output.
+    // - leads to a whole bunch of random symbols being dereferenced against GL mock as Vitest tries
+    // to probe what kind of object it is (to determine how to format it).
+    Object.defineProperty(this, 'gl', { enumerable: false });
+
     this.fileSystem = fileSystem ?? new MockFileSystem();
     this.collisionSystem = new CollisionSystem();
     this.config = {

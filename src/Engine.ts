@@ -239,7 +239,7 @@ export class Engine implements IEngine {
         }
 
         /* Lighting UBO */
-        this.activeScene.lighting.bindToUbo(this.gl, this.lightingUbo, this.config.lighting);
+        this.activeScene.lighting.bindToUbo(this.gl, this.lightingUbo);
       }
 
       /* Audio system */

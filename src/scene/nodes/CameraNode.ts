@@ -32,8 +32,7 @@ export class CameraNode extends SceneNode {
     this.fov = fov;
     this.aspectRatio = aspectRatio;
 
-    // Always switch to new camera
-    scene.activeCamera = this;
+    scene.registerCamera(this);
   }
 
   private tmp_bindToUbo_viewProjectionMatrixBuffer = new Float32Array(16);
@@ -77,5 +76,9 @@ export class CameraNode extends SceneNode {
     this.viewProjectionMatrix
       .setValue(this.projectionMatrix)
       .multiplySelf(this.viewMatrix);
+  }
+
+  public onDestroyed(): void {
+    this.scene.deregisterCamera(this);
   }
 }
