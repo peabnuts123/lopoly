@@ -1,4 +1,4 @@
-import  { Observable } from "@lopoly/engine/util/Observable";
+import { Observable } from "@lopoly/engine/util/Observable";
 
 import { DegreesToRadians } from "./util";
 import { Vector3, type Vector3Like } from "./Vector3";
@@ -8,7 +8,7 @@ export interface IReadOnlyQuaternion {
   toEuler(): EulerVector3;
   multiply(q: IReadOnlyQuaternion): IReadOnlyQuaternion;
   rotateVectorInPlace(vector: Vector3): Vector3;
-  rotateVector(vector: Vector3): Vector3;
+  rotateVector(vector: Vector3Like): Vector3;
   slerp(right: IReadOnlyQuaternion, t: number): IReadOnlyQuaternion;
   invert(): IReadOnlyQuaternion;
   normalize(): IReadOnlyQuaternion;
@@ -150,6 +150,7 @@ export class Quaternion extends Observable implements IReadOnlyQuaternion {
     }
     return this;
   }
+  /** @internal */
   private setValueXYZW(x: number, y: number, z: number, w: number): boolean {
     if (this.internal.x === x && this.internal.y === y && this.internal.z === z && this.internal.w === w) {
       // @NOTE Write is not changing the value
@@ -161,6 +162,7 @@ export class Quaternion extends Observable implements IReadOnlyQuaternion {
     this.internal.w = w;
     return true;
   }
+  /** @internal */
   private setValueQuaternion(value: IReadOnlyQuaternion): boolean {
     if (this.internal.x === value.x && this.internal.y === value.y && this.internal.z === value.z && this.internal.w === value.w) {
       // @NOTE Write is not changing the value
@@ -221,6 +223,7 @@ export class Quaternion extends Observable implements IReadOnlyQuaternion {
     return new Quaternion(0, 0, 0, 1);
   }
 
+  /** @internal */
   private static tmp_fromAxisAngle: Vector3 | undefined;
   public fromAxisAngleSelf(axis: Vector3, angle: number): this {
     const halfAngle = angle * DegreesToRadians * 0.5;
@@ -262,6 +265,7 @@ export class Quaternion extends Observable implements IReadOnlyQuaternion {
     return this;
 
   }
+  /** @internal */
   private fromEulerSelfXYZ(x: number, y: number, z: number): void {
     this.__fromEulerInner(
       x * DegreesToRadians,
@@ -269,6 +273,7 @@ export class Quaternion extends Observable implements IReadOnlyQuaternion {
       z * DegreesToRadians,
     );
   }
+  /** @internal */
   private fromEulerSelfVector(vector: Vector3Like): void {
     this.__fromEulerInner(
       vector.x * DegreesToRadians,
@@ -276,6 +281,7 @@ export class Quaternion extends Observable implements IReadOnlyQuaternion {
       vector.z * DegreesToRadians,
     );
   }
+  /** @internal */
   private __fromEulerInner(x: number, y: number, z: number): void {
     /*
       @NOTE Rotation order is ZXY where:
@@ -324,9 +330,13 @@ export class Quaternion extends Observable implements IReadOnlyQuaternion {
   }
 
   /** Reusable static values for `fromLookDirectionSelf()` */
+  /** @internal */
   private static tmp_fromLookDirectionSelf_forward: Vector3 | undefined;
+  /** @internal */
   private static tmp_fromLookDirectionSelf_up: Vector3 | undefined;
+  /** @internal */
   private static tmp_fromLookDirectionSelf_right: Vector3 | undefined;
+  /** @internal */
   private static tmp_fromLookDirectionSelf_DefaultUp: Vector3 | undefined;
   public fromLookDirectionSelf(forward: Vector3Like, up?: Vector3Like): this {
     // Param defaults
@@ -337,6 +347,7 @@ export class Quaternion extends Observable implements IReadOnlyQuaternion {
     Quaternion.tmp_fromLookDirectionSelf_up ??= Vector3.zero();
     Quaternion.tmp_fromLookDirectionSelf_right ??= Vector3.zero();
 
+    // @TODO Document why we're assigning `forward` to up?
     // Calculate strictly orthogonal basis vectors
     // using reusable static instances
     const right = Quaternion.tmp_fromLookDirectionSelf_right
