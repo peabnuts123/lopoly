@@ -70,7 +70,7 @@ layout(std140) uniform Lighting {
   vec4 pointLightRanges[MAX_POINT_LIGHTS];
   vec4 directionalLightOrientations[MAX_DIRECTIONAL_LIGHTS];
   vec4 directionalLightColors[MAX_DIRECTIONAL_LIGHTS];
-  vec4 directionalLightIntensities[MAX_POINT_LIGHTS];
+  vec4 directionalLightIntensities[MAX_DIRECTIONAL_LIGHTS];
 };
 
 void main() {
