@@ -15,6 +15,7 @@ import { InputSystem, type IInputSystem } from "./input";
 import { DebugDraw, type IDebugDraw } from "./util/DebugDraw";
 
 export type DrawTask = OpaqueDrawTask | TransparentDrawTask;
+export type StopFn = () => void;
 
 export interface DrawTaskCommon {
   renderLayer: number;
@@ -168,7 +169,7 @@ export class Engine implements IEngine {
     this.fpsLimit = fps;
   }
 
-  public run(onUpdate?: OnUpdateFn): void {
+  public run(onUpdate?: OnUpdateFn): StopFn {
     let lastFrameTime: DOMHighResTimeStamp | null = null;
     let isStopped = false;
 
@@ -274,6 +275,10 @@ export class Engine implements IEngine {
     };
 
     requestAnimationFrame(tick);
+
+    return () => {
+      isStopped = true;
+    };
   }
 
   private tmp_draw_color4Buffer = new Float32Array(4);
