@@ -970,12 +970,11 @@ export class InputSystem implements IInputSystem {
   }
 
   private onPointerDown(e: PointerEvent): void {
-    // Only acknowledge `pointerdown` if the canvas is already focused.
-    // Otherwise we would prevent focusing the canvas initially (i.e. by clicking on it)
-    // This also means the first click is ignored i.e. focusing the canvas doesn't take an action
-    if (this.state.isCanvasFocused) {
-      e.preventDefault();
-
+    // Do not acknowledge `pointerdown` if the pointer is locked but the
+    // canvas has not received focus yet. Games that don't lock the pointer
+    // receive input normally, whereas games that have locked the pointer
+    // require focus before you can interact.
+    if (!this.state.isPointerLocked || this.state.isCanvasFocused) {
       if (!this.isPointerActuallyLocked) {
         // Capture pointer, for dragging outside of the canvas
         this.canvas.setPointerCapture(e.pointerId);
@@ -995,8 +994,6 @@ export class InputSystem implements IInputSystem {
     // This prevents some edge cases where e.g. clicking and dragging into the canvas
     // doesn't misfire a rogue `pointerup` event.
     if (this.state.isCanvasFocused) {
-      e.preventDefault();
-
       // If remove touch / stylus input, deactivate the cursor
       if (e.pointerType !== 'mouse') {
         this.state.pointer.x = undefined;
@@ -1012,7 +1009,6 @@ export class InputSystem implements IInputSystem {
 
   private onPointerMove(e: PointerEvent): void {
     /**
-     * @NOTE Tricky variable to name.
      * "Active" means we should be listening to pointer movements.
      * If the pointer is supposed to be locked (through `lockPointer()`)
      * and the pointer is actually locked then it is active.
@@ -1023,8 +1019,12 @@ export class InputSystem implements IInputSystem {
      * This feels intuitive on the page but is hard to think about
      * in the code here.
      */
-    const isPointerActive = !this.state.isPointerLocked || this.isPointerActuallyLocked;
-    if (this.state.isCanvasFocused && isPointerActive) {
+
+    // Only acknowledge `pointermove` in certain scenarios:
+    // - the game HAS NOT requested the pointer be locked
+    // - the game HAS requested the pointer be locked AND it is focused and actually locked
+    // This logic seems complicated in code but feels right on the page.
+    if (!this.state.isPointerLocked || (this.state.isCanvasFocused && this.isPointerActuallyLocked)) {
       const { canvas } = this;
       const pageToCanvasX = canvas.width / canvas.clientWidth;
       const pageToCanvasY = canvas.height / canvas.clientHeight;
