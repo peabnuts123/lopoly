@@ -115,7 +115,7 @@ Now you can populate the scene:
 const player = new ModelNode(scene, 'player', playerModel);
 
 // Camera - position at (1,1,1) and point at the player
-const camera = new CameraNode(scene, 'camera', 70, 4 / 3);
+const camera = new CameraNode(scene, 'camera', 70);
 camera.position.setValue(1, 1, 1);
 camera.pointAt(player.position);
 
@@ -190,7 +190,7 @@ const playerModel = await Model.fromDefinition(engine, playerModelDefinition);
 // Scene
 const player = new ModelNode(scene, 'player', playerModel);
 
-const camera = new CameraNode(scene, 'camera', 70, 4 / 3);
+const camera = new CameraNode(scene, 'camera', 70);
 camera.position.setValue(1, 1, 1);
 camera.pointAt(player.position);
 

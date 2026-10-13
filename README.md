@@ -73,7 +73,7 @@ const sun = new DirectionalLightNode(scene, 'sun', { color: Color3.white() });
 sun.rotation.x = -90;
 
 // Camera that points at 0,0,0
-const camera = new CameraNode(scene, 'camera', 70, canvas.width / canvas.height);
+const camera = new CameraNode(scene, 'camera', 70);
 camera.position = new Vector3(1, 1, 1);
 camera.pointAt(Vector3.zero());
 

@@ -81,6 +81,7 @@ export interface IEngine {
   loadScene(scene: IScene): void;
   run(onUpdate: OnUpdateFn): void;
 
+  get canvas(): HTMLCanvasElement;
   get config(): EngineConfig;
   get gl(): WebGL2RenderingContext;
   get fileSystem(): IFileSystem;
@@ -92,7 +93,7 @@ export interface IEngine {
 }
 
 export class Engine implements IEngine {
-  private readonly canvas: HTMLCanvasElement;
+  public readonly canvas: HTMLCanvasElement;
   public readonly config: EngineConfig;
   public readonly gl: WebGL2RenderingContext;
   public readonly fileSystem: IFileSystem;
@@ -108,7 +109,6 @@ export class Engine implements IEngine {
   private lightingUbo: LightingUbo;
   private fpsLimit: number | undefined;
 
-  // @TODO Expose canvas aspect ratio and also somehow a method of listening to it
   public constructor(canvas: HTMLCanvasElement, fileSystem: IFileSystem, options?: DeepPartial<EngineConfig>) {
     this.canvas = canvas;
     this.fileSystem = fileSystem;
@@ -290,7 +290,7 @@ export class Engine implements IEngine {
     gl.enable(gl.CULL_FACE);
     // gl.cullFace(gl.BACK);
     // gl.frontFace(gl.CCW);
-    // gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    gl.viewport(0, 0, this.canvas.width, this.canvas.height);
 
     let currentShaderVariant: ShaderVariant = undefined!;
     let currentMaterial: MaterialInstance = undefined!;

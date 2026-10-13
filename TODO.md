@@ -6,11 +6,12 @@
 - [x] ~~load gltf .bin as dependency~~
 <!-- - [ ] ModelNode should be able to have no model (?) - or defer to PolyZone -->
 - [x] ~~Dithering or support for custom shaders~~
+<!-- @TODO let's get this done -->
+- [ ] Reflection blending modes
+  - Especially with new Cubemap "blending mode" property, do the cubemap properties of `Material` et al need to be one interface like `reflection.intensity` etc
 
 ## Milestone: 0.2 - "First job after uni"
   - [ ] Tidy up light attenuation shader code
-  - [ ] Reflection blending modes
-    - Especially with new Cubemap "blending mode" property, do the cubemap properties of `Material` et al need to be one interface like `reflection.intensity` etc
   - [ ] Update Rat Game to reference npm instead of local alias
   - [ ] Collision handling for concave geometry e.g. levels
   - [ ] Allow camera to look straight down with pointAt()
@@ -34,8 +35,7 @@
   - [ ] Update code example in README to have nice imports
 
 ## Milestone: 0.3 - "Squashinembugs"
-  - [ ] Camera should infer its aspect ratio, it shouldn't be a param
-    - [ ] ? Should Engine expose current aspect ratio / listen event?
+  - [x] ~~Camera should infer its aspect ratio, it shouldn't be a param~~
   - [ ] BUG: First frame all the transforms are identity
   - [ ] Callbacks for input devices disconnecting / connecting (what do we care about?)
   - [ ] Trigger type colliders
@@ -99,6 +99,8 @@ These items are roughly in priority order.
 - ModelNode's creation of a model "instance" (basically a clone) is a bit whack.
   - For example, `nodeA.model === nodeB.model` will return false
   - We should consider introducing a concept called "ModelInstance" and/or preserving the reference to the original param (it currently is discarded)
+- BUG: Setting scene ambient light to Color.white() isn't fullbright.
+- Support for analog triggers on gamepad
 
 ### Feedback from PolyZone integration
 - Add `tabIndex` to canvas - it is a prerequisite for input working
