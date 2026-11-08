@@ -13,7 +13,7 @@ export class Camera extends SceneNode {
 
   private roomBounds: RoomBounds;
 
-  public constructor(scene: IScene, aspectRatio: number, roomSize: Vector3) {
+  public constructor(scene: IScene, roomSize: Vector3) {
     super(scene, 'camera:parent');
 
     this.roomBounds = Room.calculateBounds(roomSize);
@@ -24,7 +24,7 @@ export class Camera extends SceneNode {
     pivot.rotation.euler = new Vector3(35, 0, 0);
 
     /* Camera */
-    const camera = this.camera = new CameraNode(scene, 'camera', 60, aspectRatio, pivot);
+    const camera = this.camera = new CameraNode(scene, 'camera', 60, pivot);
     camera.position.y = CameraDistance;
   }
 

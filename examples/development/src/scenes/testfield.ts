@@ -125,7 +125,7 @@ export abstract class Game {
     const burgerModel = await Model.fromDefinition(engine, models[1]);
 
     const cameraOrigin = new ObjectNode(scene, 'camera_origin');
-    const camera = new CameraNode(scene, 'camera', 70, canvas.width / canvas.height, cameraOrigin);
+    const camera = new CameraNode(scene, 'camera', 70, cameraOrigin);
     camera.position = new Vector3(-3.5, -3.5, 2);
     runLoopHooks.push((dt, time) => {
       const CameraRotationSpeedDegreesPerSecond = 15;

@@ -36,7 +36,7 @@ export abstract class Game {
     }
 
     /* Camera */
-    const camera = new CameraNode(scene, 'camera', 70, canvas.width / canvas.height);
+    const camera = new CameraNode(scene, 'camera', 70);
     camera.position = Vector3.one().scaleSelf(3);
     camera.pointAt(Vector3.zero());
 

@@ -27,7 +27,7 @@ configureInput(engine.inputSystem);
 
 /* Game */
 const RoomSize = new Vector3(15, 15, 5);
-const camera = new Camera(scene, canvas.width / canvas.height, RoomSize);
+const camera = new Camera(scene, RoomSize);
 const player = await Player.create(scene, camera);
 await Room.create(scene, RoomSize, player);
 
