@@ -1,7 +1,7 @@
-import  { Quaternion, Vector3 } from "@lopoly/engine/math";
-import  type { IInputSystem } from "@lopoly/engine/input";
-import  { SceneNode, type IScene } from "@lopoly/engine/scene";
-import  { CameraNode, ObjectNode } from "@lopoly/engine/scene/nodes";
+import { Quaternion, Vector3 } from "@lopoly/engine/math";
+import type { IInputSystem } from "@lopoly/engine/input";
+import { SceneNode, type IScene } from "@lopoly/engine/scene";
+import { CameraNode, ObjectNode } from "@lopoly/engine/scene/nodes";
 import { Room, type RoomBounds } from "./Room";
 
 const CameraRotateSpeed = 150;
@@ -13,7 +13,7 @@ export class Camera extends SceneNode {
 
   private roomBounds: RoomBounds;
 
-  public constructor(scene: IScene, roomSize: Vector3) {
+  public constructor(scene: IScene, aspectRatio: number, roomSize: Vector3) {
     super(scene, 'camera:parent');
 
     this.roomBounds = Room.calculateBounds(roomSize);
@@ -24,7 +24,7 @@ export class Camera extends SceneNode {
     pivot.rotation.euler = new Vector3(35, 0, 0);
 
     /* Camera */
-    const camera = this.camera = new CameraNode(scene, 'camera', 60, pivot);
+    const camera = this.camera = new CameraNode(scene, 'camera', 60, aspectRatio, pivot);
     camera.position.y = CameraDistance;
   }
 

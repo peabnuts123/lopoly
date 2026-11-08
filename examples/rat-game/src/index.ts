@@ -1,12 +1,12 @@
 import './style.css';
 
-import  { Vector3, Color3 } from '@lopoly/engine/math';
-import  { Engine } from '@lopoly/engine/Engine';
-import  { Scene } from '@lopoly/engine/scene';
-import  { WebFileSystem } from '@lopoly/engine/filesystem/WebFileSystem';
-import  { DebugModule } from '@lopoly/engine/util/DebugModule';
+import { Vector3, Color3 } from '@lopoly/engine/math';
+import { Engine } from '@lopoly/engine/Engine';
+import { Scene } from '@lopoly/engine/scene';
+import { WebFileSystem } from '@lopoly/engine/filesystem/WebFileSystem';
+import { DebugModule } from '@lopoly/engine/util/DebugModule';
 
-import  { GamepadAxis, GamepadButton, InputSystem, KeyCode, MouseWheelDirection } from '@lopoly/engine/input';
+import { GamepadAxis, GamepadButton, InputSystem, KeyCode, MouseWheelDirection } from '@lopoly/engine/input';
 import { Room } from './Room';
 import { Camera } from './Camera';
 import { Player } from './Player';
@@ -27,7 +27,7 @@ configureInput(engine.inputSystem);
 
 /* Game */
 const RoomSize = new Vector3(15, 15, 5);
-const camera = new Camera(scene, RoomSize);
+const camera = new Camera(scene, canvas.width / canvas.height, RoomSize);
 const player = await Player.create(scene, camera);
 await Room.create(scene, RoomSize, player);
 
