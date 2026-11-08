@@ -31,7 +31,7 @@ export const DefaultFindChildArgs: FindChildArgs = {
 export abstract class SceneNode {
   protected scene: IScene;
   public name: string;
-  protected _enabled: boolean;
+  private _enabled: boolean;
   private _isDestroyed: boolean;
 
   private transform: Transform<SceneNode>;

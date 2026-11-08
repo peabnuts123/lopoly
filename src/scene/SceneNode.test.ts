@@ -971,7 +971,7 @@ class MockSceneNode extends SceneNode {
   public constructor(scene: IScene, name: string, args?: MockSceneNodeArgs) {
     super(scene, name, args?.parent);
     if (args?.enabled !== undefined) {
-      this._enabled = args.enabled;
+      this['_enabled'] = args.enabled;
     }
   }
 
