@@ -1,7 +1,7 @@
-import  { Vector3 } from "@lopoly/engine/math/Vector3";
+import { Vector3, type IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
 import { type IScene } from "@lopoly/engine/scene/Scene";
 import { SceneNode } from "@lopoly/engine/scene/SceneNode";
-import  type { IWireframeDrawable, WireframeFaces } from "@lopoly/engine/util/DebugDraw";
+import type { IWireframeDrawable, WireframeFaces } from "@lopoly/engine/util/DebugDraw";
 import { SATColliderNode } from "./SatColliderNode";
 import type { CollisionGroup } from "./ColliderNode";
 
@@ -60,6 +60,7 @@ export class BoxColliderNode extends SATColliderNode implements IWireframeDrawab
   }
 
   public getWireframeFaces(): WireframeFaces {
+    // @TODO Don't allocate
     const verticesWorldSpace = this.getVerticesWorldSpace();
     return [
       // Front face
@@ -79,10 +80,17 @@ export class BoxColliderNode extends SATColliderNode implements IWireframeDrawab
 
   // @TODO If we could observe worldMatrixDirty we could cache this
   private _getVerticesWorldSpace__HalfDimensionsTmp = Vector3.zero();
-  protected getVerticesWorldSpace(offset?: Vector3): Vector3[] {
+  /**
+   * Get the this collider's vertices in world space.
+   *
+   * NOTE: The returned instances are reused on each call, so modifying their value
+   * may cause unintended side-effects.
+   */
+  public getVerticesWorldSpace(offset?: Vector3): readonly IReadonlyVector3[] {
     this._getVerticesWorldSpace__HalfDimensionsTmp.setValue(this.x / 2, this.y / 2, this.z / 2);
 
-    BoxColliderNode.NormalisedVerticesLocalSpace.forEach((normalizedLocalVertex, i) => {
+    for (let i = 0; i < BoxColliderNode.NormalisedVerticesLocalSpace.length; i++) {
+      const normalizedLocalVertex = BoxColliderNode.NormalisedVerticesLocalSpace[i];
       this.worldMatrix.transformPointInPlace(
         this._verticesWorldSpaceCache[i]
           .setValue(normalizedLocalVertex)
@@ -93,7 +101,7 @@ export class BoxColliderNode extends SATColliderNode implements IWireframeDrawab
         this._verticesWorldSpaceCache[i]
           .addSelf(offset);
       }
-    });
+    }
 
     return this._verticesWorldSpaceCache;
   }

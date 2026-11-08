@@ -1,12 +1,142 @@
 import { describe, test, expect } from 'vitest';
 
-import  { Vector3 } from '@lopoly/engine/math/Vector3';
-import  { AxisAlignedBoundingBox } from '@lopoly/engine/collision';
-import  type { Triangle } from "@lopoly/engine/models/geometry";
+import { Vector3 } from '@lopoly/engine/math/Vector3';
+import { AxisAlignedBoundingBox } from '@lopoly/engine/collision';
+import { BoxColliderNode } from '@lopoly/engine/scene/nodes/BoxColliderNode';
+import { MockSceneNode } from '@test/mock/MockSceneNode';
+import { createMockScene } from '@test/util';
+import type { Triangle } from "@lopoly/engine/models/geometry";
 
 import { RayCast } from './RayCast';
 
 describe("Ray casting", () => {
+  describe("Ray-BoxColliderNode intersection", () => {
+    test("Returns the nearest forward hit for a rotated box", () => {
+      // Setup
+      const { scene } = createMockScene();
+      const collider = new BoxColliderNode(scene, "box", 0, {
+        x: 2, y: 2, z: 4,
+      });
+      collider.rotation.y = 90;
+      const rayOrigin = new Vector3(0, 0, 3);
+      const rayDirection = new Vector3(0, 0, -2);
+
+      // Test
+      const result = RayCast.intersectBoxCollider(rayOrigin, rayDirection, collider);
+
+      // Assert
+      expect(result).toBeCloseTo(1);
+    });
+
+    test("Returns undefined when the ray misses the box", () => {
+      // Setup
+      const { scene } = createMockScene();
+      const collider = new BoxColliderNode(scene, "box", 0, {
+        x: 2, y: 2, z: 2,
+      });
+      const rayOrigin = new Vector3(2, 0, 3);
+      const rayDirection = new Vector3(0, 0, -1);
+
+      // Test
+      const result = RayCast.intersectBoxCollider(rayOrigin, rayDirection, collider);
+
+      // Assert
+      expect(result).toBeUndefined();
+    });
+
+    test("Returns zero when the ray starts inside the box", () => {
+      // Setup
+      const { scene } = createMockScene();
+      const collider = new BoxColliderNode(scene, "box", 0, {
+        x: 2, y: 2, z: 2,
+      });
+      const rayOrigin = new Vector3(0, 0, 0);
+      const rayDirection = new Vector3(1, 0, 0);
+
+      // Test
+      const result = RayCast.intersectBoxCollider(rayOrigin, rayDirection, collider);
+
+      // Assert
+      expect(result).toBe(0);
+    });
+
+    test("Considers the collider's full transform hierarchy", () => {
+      // Setup
+      const { scene } = createMockScene();
+      const parent = new MockSceneNode(scene, "parent");
+      const collider = new BoxColliderNode(scene, "box", 0, {
+        x: 2, y: 2, z: 4,
+      }, parent);
+      collider.position.z = 1;
+
+      // Mutate parent transform
+      parent.position.setValue(3, -2, 5);
+      parent.rotation.y = 90;
+      parent.scale.setValue(2, 3, 4);
+
+      const rayOrigin = new Vector3(7, -2, 10);
+      const rayDirection = new Vector3(0, 0, -3);
+
+      // Test
+      const result = RayCast.intersectBoxCollider(rayOrigin, rayDirection, collider);
+
+      // Assert
+      expect(result).toBeCloseTo(1);
+    });
+
+    test("Returns the closest hit for a box with negative scale", () => {
+      // Setup
+      const { scene } = createMockScene();
+      const collider = new BoxColliderNode(scene, "box", 0, {
+        x: 2, y: 2, z: 2,
+      });
+      collider.scale.setValue(-1, 1, 1);
+      const rayOrigin = new Vector3(4, 0, 0);
+      const rayDirection = new Vector3(-3, 0, 0);
+
+      // Test
+      const result = RayCast.intersectBoxCollider(rayOrigin, rayDirection, collider);
+
+      // Assert
+      expect(result).toBeCloseTo(1);
+    });
+
+    test("Returns undefined when the box is behind the ray", () => {
+      // Setup
+      const { scene } = createMockScene();
+      const collider = new BoxColliderNode(scene, "box", 0, {
+        x: 2, y: 2, z: 2,
+      });
+      const rayOrigin = new Vector3(0, 0, 3);
+      const rayDirection = new Vector3(0, 0, 1);
+
+      // Test
+      const result = RayCast.intersectBoxCollider(rayOrigin, rayDirection, collider);
+
+      // Assert
+      expect(result).toBeUndefined();
+    });
+
+    test("Returns undefined when the box has zero scale", () => {
+      // Setup
+      const { scene } = createMockScene();
+      const collider = new BoxColliderNode(scene, "box", 0, {
+        x: 2, y: 2, z: 2,
+      });
+      const rayOrigin = new Vector3(0, 0, 3);
+      const rayDirection = new Vector3(0, 0, -1);
+      const initialResult = RayCast.intersectBoxCollider(rayOrigin, rayDirection, collider);
+
+      // Test
+      collider.scale.z = 0;
+      const updatedResult = RayCast.intersectBoxCollider(rayOrigin, rayDirection, collider);
+
+      // Assert
+      expect(initialResult).toBe(2);
+      expect(updatedResult).toBeUndefined();
+    });
+  });
+
   describe("Ray-AABB intersection", () => {
     test("Against corner of unit cube", () => {
       // Setup
@@ -49,7 +179,7 @@ describe("Ray casting", () => {
 
       // Test
       const result = RayCast.intersectAABB(rayOrigin, rayDirection, aabb);
-      const intersectionPoint = result === undefined ? undefined : rayDirection.scale(result).addSelf(rayOrigin);
+      const intersectionPoint = rayDirection.scale(result!).addSelf(rayOrigin);
 
       // Assert
       expect(result).toBe(1);
