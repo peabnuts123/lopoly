@@ -1035,15 +1035,29 @@ export class InputSystem implements IInputSystem {
       this.state.pointer.xDelta = e.movementX * pageToCanvasX;
       this.state.pointer.yDelta = e.movementY * pageToCanvasY;
 
-      // Update mouse state from current buttons bit mask
-      // @NOTE Weird to do this in `pointermove` you might ask?
-      // Yeah, pretty weird. But you might be surprised to learn
-      // this is how the specification works.
-      // `pointerup` and `pointerdown` don't fire if you are already
-      // pressing another mouse button. The specification says
-      // that subsequent mouse pressed must generate `pointermove`
-      // events.
-      this.updateMouseState(e.buttons);
+      // @NOTE Don't update buttons until the canvas is focused.
+      // This ignores click events that were sourced off the canvas
+      // so e.g. clicking and dragging into the canvas won't fire as
+      // a click on the first frame.
+      // This still allows you to click something in the game without
+      // first focusing the canvas, because the buttons will be updated
+      // by `onPointerDown()`. The edge case here is if you drag a
+      // click into the canvas (e.g. holding right click), then
+      // click another mouse button (e.g. left click), the click
+      // will be ignored. There's little we can do about this.
+      // There are also other bugs we can't do much about anyway
+      // e.g. clicking a second mouse button without moving the mouse.
+      if (this.state.isCanvasFocused) {
+        // Update mouse state from current buttons bit mask
+        // @NOTE Weird to do this in `pointermove` you might ask?
+        // Yeah, pretty weird. But you might be surprised to learn
+        // this is how the specification works.
+        // `pointerup` and `pointerdown` don't fire if you are already
+        // pressing another mouse button. The specification says
+        // that subsequent mouse pressed must generate `pointermove`
+        // events.
+        this.updateMouseState(e.buttons);
+      }
     }
   }
 
