@@ -1,5 +1,5 @@
-import  { createBuffer, BufferType } from "@lopoly/engine/util/createBuffer";
-import  type { IEngine } from "@lopoly/engine/Engine";
+import { createBuffer, BufferType } from "@lopoly/engine/util/createBuffer";
+import type { IEngine } from "@lopoly/engine/Engine";
 
 import { ShaderVariant } from "./shaders/ShaderVariant";
 import { DefaultShaderInstance } from "./shaders/DefaultShader";

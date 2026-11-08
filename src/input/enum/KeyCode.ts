@@ -27,6 +27,7 @@ export const KeyCode = createInputEnum('Keyboard', {
   F18: 'F18',
   F19: 'F19',
   F20: 'F20',
+  Tilde: 'Backquote',
   Backquote: 'Backquote',
   Digit1: 'Digit1',
   Digit2: 'Digit2',

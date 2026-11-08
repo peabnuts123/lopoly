@@ -50,9 +50,10 @@ export class PointLightNode extends SceneNode {
     this.intensity = options?.intensity ?? 1;
     this.range = options?.range ?? this.scene.engine.config.lighting.defaultPointLightRange;
 
-    // @TODO @DEBUG This should be based on camera distance or something.
-    if (scene.lighting.pointLights.length < this.scene.engine.config.lighting.maxPointLights) {
-      scene.lighting.pointLights.push(this);
-    }
+    this.scene.lighting.registerLight(this);
+  }
+
+  public override onDestroyed(): void {
+    this.scene.lighting.deregisterLight(this);
   }
 }

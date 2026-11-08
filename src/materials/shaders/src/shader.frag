@@ -4,6 +4,8 @@
 
 precision mediump float;
 
+// #define METALLIC_REFLECTION
+
 /* Fragment attributes */
 in vec4 fragmentColor;
 in vec3 fragmentLighting;
@@ -44,21 +46,43 @@ void main() {
 #ifdef DIFFUSE_TEXTURE
   vec4 sampledColor = texture(diffuseTextureSampler, fragmentTextureCoord);
 #endif
-#ifdef REFLECTION
-  vec3 incidence = normalize(worldPosition - cameraPosition);
-  // @NOTE Change swizzle of reflection angle to correct for Z=up
-  vec3 reflection = reflect(incidence, normalize(worldNormal)).xzy;
-  vec4 reflectionColor = vec4(texture(cubemapSampler, reflection).rgb, 1.0f) * cubemapIntensity;
-#endif
 
-  outputColor = fragmentColor * vec4(fragmentLighting, 1.0f)
-#ifdef DIFFUSE_TEXTURE
-  * sampledColor
+#ifdef METALLIC_REFLECTION
+  #ifdef REFLECTION
+    vec3 incidence = normalize(worldPosition - cameraPosition);
+    // @NOTE Change swizzle of reflection angle to correct for Z=up
+    vec3 reflection = reflect(incidence, normalize(worldNormal)).xzy;
+    vec4 reflectionColor = vec4(texture(cubemapSampler, reflection).rgb, 1.0f);
+  #endif
+
+    vec4 surfaceColor = fragmentColor;
+  #ifdef DIFFUSE_TEXTURE
+    surfaceColor *= sampledColor;
+  #endif
+    vec4 litColor = surfaceColor * vec4(fragmentLighting, 1.0f);
+  #ifdef REFLECTION
+    vec4 environmentColor = surfaceColor * reflectionColor;
+    outputColor = mix(litColor, environmentColor, cubemapIntensity);
+  #else
+    outputColor = litColor;
+  #endif
+#else
+  #ifdef REFLECTION
+    vec3 incidence = normalize(worldPosition - cameraPosition);
+    // @NOTE Change swizzle of reflection angle to correct for Z=up
+    vec3 reflection = reflect(incidence, normalize(worldNormal)).xzy;
+    vec4 reflectionColor = vec4(texture(cubemapSampler, reflection).rgb, 1.0f) * cubemapIntensity;
+  #endif
+
+    outputColor = fragmentColor * vec4(fragmentLighting, 1.0f)
+  #ifdef DIFFUSE_TEXTURE
+    * sampledColor
+  #endif
+  #ifdef REFLECTION
+    + reflectionColor
+  #endif
+    ;
 #endif
-#ifdef REFLECTION
-  + reflectionColor
-#endif
-  ;
 
 #if defined(FIXED_TRANSPARENCY_ALPHA)
   // Fixed alpha value for transparent pixels

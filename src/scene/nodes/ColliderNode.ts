@@ -143,7 +143,7 @@ export abstract class ColliderNode extends DrawableSceneNode {
   }
 
   public override draw(engine: IEngine, _drawQueue: DrawTask[]): void {
-    if (this.drawWireframe && isWireframeDrawable(this)) {
+    if (this.drawWireframe && isWireframeDrawable(this) && this.enabled) {
       engine.debugDraw.drawWireframe(this, { overlay: true });
     }
   }

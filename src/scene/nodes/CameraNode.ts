@@ -16,7 +16,6 @@ export const CameraUboIndex = 1;
 
 export class CameraNode extends SceneNode {
   public fov: number;
-  public aspectRatio: number; // @TODO remove, derive from canvas
   public near: number = 0.1;
   public far: number = 100;
 
@@ -27,13 +26,11 @@ export class CameraNode extends SceneNode {
 
   private uboCameraPositionData_tmp = new Float32Array(3);
 
-  public constructor(scene: IScene, name: string, fov: number, aspectRatio: number, parent?: SceneNode) {
+  public constructor(scene: IScene, name: string, fov: number, parent?: SceneNode) {
     super(scene, name, parent);
     this.fov = fov;
-    this.aspectRatio = aspectRatio;
 
-    // Always switch to new camera
-    scene.activeCamera = this;
+    scene.registerCamera(this);
   }
 
   private tmp_bindToUbo_viewProjectionMatrixBuffer = new Float32Array(16);
@@ -69,7 +66,7 @@ export class CameraNode extends SceneNode {
     // @TODO cache this matrix
     this.projectionMatrix.perspectiveSelf(
       this.fov * DegreesToRadians,
-      this.aspectRatio,
+      this.scene.engine.canvas.width / this.scene.engine.canvas.height,
       this.near,
       this.far,
     );
@@ -77,5 +74,9 @@ export class CameraNode extends SceneNode {
     this.viewProjectionMatrix
       .setValue(this.projectionMatrix)
       .multiplySelf(this.viewMatrix);
+  }
+
+  public onDestroyed(): void {
+    this.scene.deregisterCamera(this);
   }
 }

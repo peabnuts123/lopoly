@@ -15,6 +15,7 @@ import { InputSystem, type IInputSystem } from "./input";
 import { DebugDraw, type IDebugDraw } from "./util/DebugDraw";
 
 export type DrawTask = OpaqueDrawTask | TransparentDrawTask;
+export type StopFn = () => void;
 
 export interface DrawTaskCommon {
   renderLayer: number;
@@ -81,6 +82,7 @@ export interface IEngine {
   loadScene(scene: IScene): void;
   run(onUpdate: OnUpdateFn): void;
 
+  get canvas(): HTMLCanvasElement;
   get config(): EngineConfig;
   get gl(): WebGL2RenderingContext;
   get fileSystem(): IFileSystem;
@@ -92,7 +94,7 @@ export interface IEngine {
 }
 
 export class Engine implements IEngine {
-  private readonly canvas: HTMLCanvasElement;
+  public readonly canvas: HTMLCanvasElement;
   public readonly config: EngineConfig;
   public readonly gl: WebGL2RenderingContext;
   public readonly fileSystem: IFileSystem;
@@ -108,7 +110,6 @@ export class Engine implements IEngine {
   private lightingUbo: LightingUbo;
   private fpsLimit: number | undefined;
 
-  // @TODO Expose canvas aspect ratio and also somehow a method of listening to it
   public constructor(canvas: HTMLCanvasElement, fileSystem: IFileSystem, options?: DeepPartial<EngineConfig>) {
     this.canvas = canvas;
     this.fileSystem = fileSystem;
@@ -168,7 +169,7 @@ export class Engine implements IEngine {
     this.fpsLimit = fps;
   }
 
-  public run(onUpdate?: OnUpdateFn): void {
+  public run(onUpdate?: OnUpdateFn): StopFn {
     let lastFrameTime: DOMHighResTimeStamp | null = null;
     let isStopped = false;
 
@@ -239,7 +240,7 @@ export class Engine implements IEngine {
         }
 
         /* Lighting UBO */
-        this.activeScene.lighting.bindToUbo(this.gl, this.lightingUbo, this.config.lighting);
+        this.activeScene.lighting.bindToUbo(this.gl, this.lightingUbo);
       }
 
       /* Audio system */
@@ -274,6 +275,10 @@ export class Engine implements IEngine {
     };
 
     requestAnimationFrame(tick);
+
+    return () => {
+      isStopped = true;
+    };
   }
 
   private tmp_draw_color4Buffer = new Float32Array(4);
@@ -290,7 +295,7 @@ export class Engine implements IEngine {
     gl.enable(gl.CULL_FACE);
     // gl.cullFace(gl.BACK);
     // gl.frontFace(gl.CCW);
-    // gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    gl.viewport(0, 0, this.canvas.width, this.canvas.height);
 
     let currentShaderVariant: ShaderVariant = undefined!;
     let currentMaterial: MaterialInstance = undefined!;
@@ -440,6 +445,14 @@ export class Engine implements IEngine {
       if (worldMatrixUniform) {
         task.uniforms.worldMatrix.writeTo(this.tmp_draw_mat4Buffer);
         gl.uniformMatrix4fv(worldMatrixUniform, false, this.tmp_draw_mat4Buffer);
+
+        // @NOTE Flip winding order if model is inverted due to scale
+        const worldMatrixDeterminant = task.uniforms.worldMatrix.determinant();
+        if (worldMatrixDeterminant < 0) {
+          gl.frontFace(gl.CW);
+        } else {
+          gl.frontFace(gl.CCW);
+        }
       }
 
       // Lighting uniform

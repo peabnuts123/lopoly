@@ -1,5 +1,5 @@
-import  type { IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
-import  { Observable } from "@lopoly/engine/util/Observable";
+import type { IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
+import { Observable } from "@lopoly/engine/util/Observable";
 
 /* Triangles */
 /** A set of three vertex positions. */

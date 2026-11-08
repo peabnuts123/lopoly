@@ -1,4 +1,4 @@
-import  { toFixed } from "@lopoly/engine/math/util";
+import { toFixed } from "@lopoly/engine/math/util";
 
 export interface RateCounterConstructorOptions {
   intervalSeconds: number;
@@ -88,12 +88,11 @@ export class RateCounter {
    * Stop ticking.
    */
   public stop(): void {
-    if (this.startTime === undefined || this.previous === undefined) return;
-
-
     clearInterval(this.intervalKey);
     this.intervalKey = undefined;
     this.startTime = undefined;
+
+    if (this.startTime === undefined || this.previous === undefined) return;
 
     // Print summary
     if (this.logOutput) {
