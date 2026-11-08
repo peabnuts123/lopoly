@@ -1,4 +1,4 @@
-import  type { IEngine } from '@lopoly/engine/Engine';
+import type { IEngine } from '@lopoly/engine/Engine';
 import type { ShaderVariantOptions } from './ShaderVariant';
 
 export interface IShader {

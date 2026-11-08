@@ -3,8 +3,8 @@ import { ModelPartGeometry } from './ModelPartGeometry';
 import { MeshPrimitiveCache } from '../MeshPrimitiveCache';
 import { MockEngine } from '@test/mock/MockEngine';
 import { createMockMeshPrimitiveDefinition } from './MeshPrimitiveGeometry.test';
-import  { Computed } from '@lopoly/engine/util/Computed';
-import  { Matrix4, Quaternion, Vector3 } from '@lopoly/engine/math';
+import { Computed } from '@lopoly/engine/util/Computed';
+import { Matrix4, Quaternion, Vector3 } from '@lopoly/engine/math';
 import { expectVectorArraysToBeEqual } from '@test/util/expect';
 
 /*

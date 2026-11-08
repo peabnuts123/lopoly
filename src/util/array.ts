@@ -1,4 +1,4 @@
-import  type { TypedArray } from "@lopoly/engine/util/types";
+import type { TypedArray } from "@lopoly/engine/util/types";
 
 /**
  * Split a typed array into a series of chunks and then map each chunk into

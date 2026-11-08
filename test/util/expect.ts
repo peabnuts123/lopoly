@@ -1,8 +1,8 @@
 import { expect } from "vitest";
 
-import  type { Matrix4 } from "@lopoly/engine/math/Matrix4";
-import  type { IReadOnlyQuaternion } from "@lopoly/engine/math/Quaternion";
-import  type { Vector3Like } from "@lopoly/engine/math/Vector3";
+import type { Matrix4 } from "@lopoly/engine/math/Matrix4";
+import type { IReadOnlyQuaternion } from "@lopoly/engine/math/Quaternion";
+import type { Vector3Like } from "@lopoly/engine/math/Vector3";
 
 export function expectQuaternionsToBeEqual(actual: IReadOnlyQuaternion, expected: IReadOnlyQuaternion): void {
   expect(actual.x, `Expected '${actual}' to equal ${expected}`).toBeCloseTo(expected.x, 8);

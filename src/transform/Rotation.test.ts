@@ -2,8 +2,8 @@ import { describe, test, expect } from 'vitest';
 
 import { expectQuaternionsToBeEqual, expectVectorsToBeEqual } from '@test/util/expect';
 
-import  { Quaternion } from '@lopoly/engine/math/Quaternion';
-import  { Vector3 } from '@lopoly/engine/math/Vector3';
+import { Quaternion } from '@lopoly/engine/math/Quaternion';
+import { Vector3 } from '@lopoly/engine/math/Vector3';
 
 import { Rotation } from './Rotation';
 import { WellKnownQuaternions } from '@test/util/quaternions';

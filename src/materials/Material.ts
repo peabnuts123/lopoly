@@ -1,8 +1,8 @@
-import  { Color4 } from '@lopoly/engine/math/Color4';
-import  { Observable } from '@lopoly/engine/util/Observable';
-import  { Texture, Cubemap } from '@lopoly/engine/textures';
-import  type { IEngine } from '@lopoly/engine/Engine';
-import  type { MaterialDefinition } from '@lopoly/engine/loaders/definitions';
+import { Color4 } from '@lopoly/engine/math/Color4';
+import { Observable } from '@lopoly/engine/util/Observable';
+import { Texture, Cubemap } from '@lopoly/engine/textures';
+import type { IEngine } from '@lopoly/engine/Engine';
+import type { MaterialDefinition } from '@lopoly/engine/loaders/definitions';
 
 import { ShaderBlendingMode } from './shaders/ShaderBlendingMode';
 
