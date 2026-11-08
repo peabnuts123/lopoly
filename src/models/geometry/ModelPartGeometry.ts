@@ -1,10 +1,10 @@
-import  { Matrix4 } from "@lopoly/engine/math/Matrix4";
-import  { Vector3, type IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
-import  { type IReadonlyVector2 } from "@lopoly/engine/math/Vector2";
-import  type { IReadonlyColor4 } from "@lopoly/engine/math/Color4";
-import  { Computed } from "@lopoly/engine/util/Computed";
-import  { Optional, type Mutable } from "@lopoly/engine/util/types";
-import  { AxisAlignedBoundingBox, type IReadonlyAxisAlignedBoundingBox } from "@lopoly/engine/collision";
+import { Matrix4 } from "@lopoly/engine/math/Matrix4";
+import { Vector3, type IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
+import { type IReadonlyVector2 } from "@lopoly/engine/math/Vector2";
+import type { IReadonlyColor4 } from "@lopoly/engine/math/Color4";
+import { Computed } from "@lopoly/engine/util/Computed";
+import { Optional, type Mutable } from "@lopoly/engine/util/types";
+import { AxisAlignedBoundingBox, type IReadonlyAxisAlignedBoundingBox } from "@lopoly/engine/collision";
 
 import type { MeshPrimitiveCache } from "../MeshPrimitiveCache";
 import {
@@ -253,26 +253,47 @@ export class ModelPartGeometry {
     const tmp_allTriangleNormals_edge2 = Vector3.zero();
     this._allTriangleNormals = new Computed<readonly IReadonlyVector3[]>([], {
       dependencies: [
-        this._allVertexPositions,
         this._allTriangles,
+        localMatrixComputed,
       ],
       recompute: (_self) => {
         const self = _self as Vector3[]; // @NOTE type laundering for mutability
 
-        this._allTriangles.value.forEach((triangle, i) => {
-          // Get or create reference to Vector3
-          let triangleNormal: Vector3 = self[i];
-          if (triangleNormal === undefined) {
-            triangleNormal = self[i] = Vector3.zero();
+        const localMatrixDeterminant = localMatrixComputed.value.determinant();
+        const hasSkin = skinJointMatricesComputed !== undefined;
+
+        // Iterate every triangle of every primitive by indexing `allTriangles`
+        let triangleIndex = 0;
+        for (const primitiveCache of primitiveCaches) {
+          const primitiveHasJointWeights = primitiveCache.geometry.jointIndices !== undefined && primitiveCache.geometry.jointWeights !== undefined;
+          for (let i = 0; i < primitiveCache.geometry.triangleIndices.length; i++) {
+            const triangle = this._allTriangles.value[triangleIndex];
+
+            // Get or create reference to Vector3
+            let triangleNormal: Vector3 = self[triangleIndex];
+            if (triangleNormal === undefined) {
+              triangleNormal = self[triangleIndex] = Vector3.zero();
+            }
+
+            // Compute triangle edges (using tmp shared instances to avoid allocating)
+            const edge1 = tmp_allTriangleNormals_edge1.setValue(triangle[1]).subtractSelf(triangle[0]);
+            const edge2 = tmp_allTriangleNormals_edge2.setValue(triangle[2]).subtractSelf(triangle[0]);
+
+            // Compute normal as edge1 x edge2
+            const result = triangleNormal.setValue(edge1).crossSelf(edge2).normalizeSelf();
+
+            // Flip normal if determinant is negative - model is inverted
+            // but will be rendered with opposite winding to remain convex.
+            // This only applies to unskinned primitives, as skinned primitives
+            // ignore their local transform hierarchy, and are instead computed
+            // entirely by their bones' transforms
+            if (!(hasSkin && primitiveHasJointWeights) && localMatrixDeterminant < 0) {
+              result.scaleSelf(-1);
+            }
+
+            triangleIndex++;
           }
-
-          // Compute triangle edges (using tmp shared instances to avoid allocating)
-          const edge1 = tmp_allTriangleNormals_edge1.setValue(triangle[1]).subtractSelf(triangle[0]);
-          const edge2 = tmp_allTriangleNormals_edge2.setValue(triangle[2]).subtractSelf(triangle[0]);
-
-          // Compute normal as edge1 x edge2
-          return triangleNormal.setValue(edge1).crossSelf(edge2).normalizeSelf();
-        });
+        }
       },
     });
 

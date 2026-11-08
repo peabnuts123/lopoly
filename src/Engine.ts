@@ -445,6 +445,14 @@ export class Engine implements IEngine {
       if (worldMatrixUniform) {
         task.uniforms.worldMatrix.writeTo(this.tmp_draw_mat4Buffer);
         gl.uniformMatrix4fv(worldMatrixUniform, false, this.tmp_draw_mat4Buffer);
+
+        // @NOTE Flip winding order if model is inverted due to scale
+        const worldMatrixDeterminant = task.uniforms.worldMatrix.determinant();
+        if (worldMatrixDeterminant < 0) {
+          gl.frontFace(gl.CW);
+        } else {
+          gl.frontFace(gl.CCW);
+        }
       }
 
       // Lighting uniform
