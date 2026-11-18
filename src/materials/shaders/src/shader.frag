@@ -115,20 +115,20 @@ mat4 dither_table=mat4
 );
 vec3 dither(vec3 color, ivec2 screen) {
   // Color config
-  float numColourBands = float(1 << DITHER_BITS_PER_CHANNEL);
-  float maxValue = numColourBands - 1.0f;
+  float numColorBands = float(1 << DITHER_BITS_PER_CHANNEL);
+  float maxValue = numColorBands - 1.0f;
 
   // Sample dither table
   float dither = dither_table[screen.y % 4][screen.x % 4];
   // Compute dither offset - a value between -0.5 (inclusive) and 0.5 (exclusive)
   float ditherOffset = (dither / 16.0f) - 0.5f;
 
-  // Scale normalized colour into N-bit colour, add dither offset,
-  // then floor the result (compress into N colour bands).
-  // This shifts the colour within the range of 1 colour band
+  // Scale normalized color into N-bit color, add dither offset,
+  // then floor the result (compress into N color bands).
+  // This shifts the color within the range of 1 color band
   // Clamp for sanity, even though GL should handle this anyway.
   color = clamp(
-    floor(color * numColourBands + ditherOffset),
+    floor(color * numColorBands + ditherOffset),
     0.0f,
     maxValue
   );

@@ -63,10 +63,10 @@ const canvas = document.getElementById('game') as HTMLCanvasElement;
 const fileSystem = new WebFileSystem();
 const engine = new Engine(canvas, fileSystem);
 
-// Scene + ambient lighting + clear colour
+// Scene + ambient lighting + clear color
 const scene = new Scene(engine);
 scene.lighting.ambientColor = new Color3(0x20, 0x20, 0x20);
-scene.clearColour = new Color3(0x10, 0x20, 0x50);
+scene.clearColor = new Color3(0x10, 0x20, 0x50);
 
 // Lighting - DirectionalLightNode or PointLightNode
 const sun = new DirectionalLightNode(scene, 'sun', { color: Color3.white() });

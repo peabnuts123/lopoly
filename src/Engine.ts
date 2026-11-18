@@ -288,7 +288,7 @@ export class Engine implements IEngine {
   private draw(drawQueue: DrawTask[]) {
     const { gl } = this;
 
-    const clearColor = this.activeScene?.clearColour ?? DefaultClearColor;
+    const clearColor = this.activeScene?.clearColor ?? DefaultClearColor;
     gl.clearColor(clearColor.r / 0xFF, clearColor.g / 0xFF, clearColor.b / 0xFF, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);

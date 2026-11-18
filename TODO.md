@@ -21,7 +21,7 @@
     - What if encode debug captured video directly to mp4 in-browser
   - [ ] Ability to change scene (high pri??)
   - [ ] Allow one-shot loading of a model e.g. `Model.fromPath()` or `GltfLoader.totallyLoadFully()` or whatever. We maybe even should just make the ModelDefinition call something odd. Technically `Model.load()` would match other resource APIs
-  - [ ] Is a material with a transparent blending mode but opaque colours depth tested … ? Check the documentation is correct. Could we just blend every pixel, does it need to just be transparent pixels?
+  - [ ] Is a material with a transparent blending mode but opaque colors depth tested … ? Check the documentation is correct. Could we just blend every pixel, does it need to just be transparent pixels?
   - [ ] (ALREADY DONE?) Support for touch inputs? how does that work?
   - [ ] Move InputSystem config (e.g. analog button threshold) into Engine.config
   - [ ] Make `CollisionSystem.MaxCollisionGroups` configurable from engine config
@@ -93,7 +93,7 @@ These items are roughly in priority order.
   - Use Computed to cache `BoxColliderNode.getVerticesWorldSpace()`
   - Use Computed to cache `CameraNode.projectionMatrix`
   - Remove or promote `Computed.debug_name`
-  - Think about gamma vs linear colour encoding (e.g. doing maths with Color3 vs displaying Color3)
+  - Think about gamma vs linear color encoding (e.g. doing maths with Color3 vs displaying Color3)
 
 ## Not yet categorised
 - ModelNode's creation of a model "instance" (basically a clone) is a bit whack.

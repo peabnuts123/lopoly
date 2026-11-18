@@ -117,7 +117,7 @@ export abstract class Game {
     const { debugDraw } = engine;
     const scene = new Scene(engine);
     scene.lighting.ambientColor = new Color3(30, 30, 30);
-    scene.clearColour = new Color3(0, 0, 50);
+    scene.clearColor = new Color3(0, 0, 50);
 
     // Load models
     const boxModel = await Model.fromDefinition(engine, models[0]);

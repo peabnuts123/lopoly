@@ -24,8 +24,8 @@ export interface IScene {
   set engine(value: IEngine);
   get lighting(): SceneLighting;
   set lighting(value: SceneLighting);
-  get clearColour(): Color3;
-  set clearColour(value: Color3);
+  get clearColor(): Color3;
+  set clearColor(value: Color3);
 }
 
 export class Scene implements IScene {
@@ -33,14 +33,14 @@ export class Scene implements IScene {
   public readonly engine: IEngine;
   private topLevelNodes: SceneNode[];
   public readonly lighting: SceneLighting;
-  public clearColour: Color3;
+  public clearColor: Color3;
 
   public constructor(engine: IEngine) {
     this.engine = engine;
     this.topLevelNodes = [];
     this.cameras = [];
     this.lighting = new SceneLighting(engine);
-    this.clearColour = DefaultClearColor.clone();
+    this.clearColor = DefaultClearColor.clone();
 
     if (engine.activeScene === undefined) {
       engine.loadScene(this);

@@ -28,7 +28,7 @@ export abstract class Game {
     const engine = new Engine(canvas, fileSystem, { rendering: { fullScreenDither: true } });
     const scene = new Scene(engine);
     scene.lighting.ambientColor = new Color3(1, 1, 1).scaleSelf(50);
-    scene.clearColour = new Color3(60, 128, 255);
+    scene.clearColor = new Color3(60, 128, 255);
 
     const runLoopHooks: Array<(dt: number, time: number) => void> = [];
 

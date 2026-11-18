@@ -25,7 +25,7 @@ export abstract class Game {
     const engine = new Engine(canvas, fileSystem);
     const scene = new Scene(engine);
     scene.lighting.ambientColor = new Color3(30, 30, 30);
-    scene.clearColour = Color3.black();
+    scene.clearColor = Color3.black();
 
     const runLoopHooks: Array<(dt: number, time: number) => void> = [];
 
