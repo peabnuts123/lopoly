@@ -604,12 +604,12 @@ export abstract class Game {
     }
 
     /* Run loop */
-    engine.run((dt, time, stop): void => {
+    engine.run((dt, time): void => {
       // Invoke hooks
       runLoopHooks.forEach((hook) => hook(dt, time));
 
       if (time > MaxRuntimeSeconds) {
-        stop();
+        engine.stop();
       }
     });
   }

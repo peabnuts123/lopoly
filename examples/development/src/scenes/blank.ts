@@ -55,11 +55,11 @@ export abstract class Game {
     });
 
     /* Run */
-    engine.run((dt, time, stop) => {
+    engine.run((dt, time) => {
       runLoopHooks.forEach((hook) => hook(dt, time));
 
       if (time > MaxRuntimeSeconds) {
-        stop();
+        engine.stop();
       }
     });
   }

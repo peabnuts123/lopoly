@@ -66,4 +66,5 @@ export class MockEngine implements IEngine {
   public run(_onUpdate: OnUpdateFn): void {
     throw new Error(`run() is not mocked in MockEngine`);
   }
+  public stop(): void {}
 }

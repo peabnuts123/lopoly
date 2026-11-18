@@ -76,11 +76,12 @@ export const DefaultEngineConfig = {
   },
 } satisfies EngineConfig;
 
-export type OnUpdateFn = (dt: number, time: number, stop: () => void) => void
+export type OnUpdateFn = (dt: number, time: number) => void
 
 export interface IEngine {
   loadScene(scene: IScene): void;
   run(onUpdate: OnUpdateFn): void;
+  stop(): void;
 
   get canvas(): HTMLCanvasElement;
   get config(): EngineConfig;
@@ -106,6 +107,7 @@ export class Engine implements IEngine {
   private _normalTmp: Matrix3 = new Matrix3();
 
   private _activeScene: IScene | undefined;
+  private isRunning: boolean = false;
   private cameraUbo: CameraUbo;
   private lightingUbo: LightingUbo;
   private fpsLimit: number | undefined;
@@ -169,9 +171,14 @@ export class Engine implements IEngine {
     this.fpsLimit = fps;
   }
 
-  public run(onUpdate?: OnUpdateFn): StopFn {
+  public run(onUpdate?: OnUpdateFn): void {
+    if (this.isRunning) {
+      console.warn(`[${Engine.name}] (${this.run.name}) Cannot run - engine is already running`);
+      return;
+    }
+
     let lastFrameTime: DOMHighResTimeStamp | null = null;
-    let isStopped = false;
+    this.isRunning = true;
 
     // Count number of frames drawn per second
     const fps = new RateCounter('FPS');
@@ -230,7 +237,7 @@ export class Engine implements IEngine {
       this.activeScene?.onUpdate(dt, timestamp / 1000);
 
       /* Update external (user-controlled) state second */
-      onUpdate?.(dt, timestamp / 1000, () => isStopped = true);
+      onUpdate?.(dt, timestamp / 1000);
 
       /* Update global UBOs */
       if (this.activeScene) {
@@ -264,7 +271,7 @@ export class Engine implements IEngine {
       debug_resourceCounters.mesh.shared.count(resources.mesh.shared);
       debug_resourceCounters.drawCalls.count(resources.drawCalls);
 
-      if (!isStopped) {
+      if (this.isRunning) {
         requestAnimationFrame(tick);
       } else {
         fps.stop();
@@ -275,10 +282,10 @@ export class Engine implements IEngine {
     };
 
     requestAnimationFrame(tick);
+  }
 
-    return () => {
-      isStopped = true;
-    };
+  public stop(): void {
+    this.isRunning = false;
   }
 
   private tmp_draw_color4Buffer = new Float32Array(4);
