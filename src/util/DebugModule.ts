@@ -1,5 +1,5 @@
 import { type MediaStreamAudioDestinationNode, type IAudioContext } from 'standardized-audio-context';
-import  type { Engine, IEngine } from '@lopoly/engine/Engine';
+import type { Engine, IEngine } from '@lopoly/engine/Engine';
 import { zipSync } from 'fflate';
 
 

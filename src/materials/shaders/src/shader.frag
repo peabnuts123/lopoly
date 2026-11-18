@@ -4,6 +4,8 @@
 
 precision mediump float;
 
+// #define METALLIC_REFLECTION
+
 /* Fragment attributes */
 in vec4 fragmentColor;
 in vec3 fragmentLighting;
@@ -44,21 +46,43 @@ void main() {
 #ifdef DIFFUSE_TEXTURE
   vec4 sampledColor = texture(diffuseTextureSampler, fragmentTextureCoord);
 #endif
-#ifdef REFLECTION
-  vec3 incidence = normalize(worldPosition - cameraPosition);
-  // @NOTE Change swizzle of reflection angle to correct for Z=up
-  vec3 reflection = reflect(incidence, normalize(worldNormal)).xzy;
-  vec4 reflectionColor = vec4(texture(cubemapSampler, reflection).rgb, 1.0f) * cubemapIntensity;
-#endif
 
-  outputColor = fragmentColor * vec4(fragmentLighting, 1.0f)
-#ifdef DIFFUSE_TEXTURE
-  * sampledColor
+#ifdef METALLIC_REFLECTION
+  #ifdef REFLECTION
+    vec3 incidence = normalize(worldPosition - cameraPosition);
+    // @NOTE Change swizzle of reflection angle to correct for Z=up
+    vec3 reflection = reflect(incidence, normalize(worldNormal)).xzy;
+    vec4 reflectionColor = vec4(texture(cubemapSampler, reflection).rgb, 1.0f);
+  #endif
+
+    vec4 surfaceColor = fragmentColor;
+  #ifdef DIFFUSE_TEXTURE
+    surfaceColor *= sampledColor;
+  #endif
+    vec4 litColor = surfaceColor * vec4(fragmentLighting, 1.0f);
+  #ifdef REFLECTION
+    vec4 environmentColor = surfaceColor * reflectionColor;
+    outputColor = mix(litColor, environmentColor, cubemapIntensity);
+  #else
+    outputColor = litColor;
+  #endif
+#else
+  #ifdef REFLECTION
+    vec3 incidence = normalize(worldPosition - cameraPosition);
+    // @NOTE Change swizzle of reflection angle to correct for Z=up
+    vec3 reflection = reflect(incidence, normalize(worldNormal)).xzy;
+    vec4 reflectionColor = vec4(texture(cubemapSampler, reflection).rgb, 1.0f) * cubemapIntensity;
+  #endif
+
+    outputColor = fragmentColor * vec4(fragmentLighting, 1.0f)
+  #ifdef DIFFUSE_TEXTURE
+    * sampledColor
+  #endif
+  #ifdef REFLECTION
+    + reflectionColor
+  #endif
+    ;
 #endif
-#ifdef REFLECTION
-  + reflectionColor
-#endif
-  ;
 
 #if defined(FIXED_TRANSPARENCY_ALPHA)
   // Fixed alpha value for transparent pixels
@@ -91,20 +115,20 @@ mat4 dither_table=mat4
 );
 vec3 dither(vec3 color, ivec2 screen) {
   // Color config
-  float numColourBands = float(1 << DITHER_BITS_PER_CHANNEL);
-  float maxValue = numColourBands - 1.0f;
+  float numColorBands = float(1 << DITHER_BITS_PER_CHANNEL);
+  float maxValue = numColorBands - 1.0f;
 
   // Sample dither table
   float dither = dither_table[screen.y % 4][screen.x % 4];
   // Compute dither offset - a value between -0.5 (inclusive) and 0.5 (exclusive)
   float ditherOffset = (dither / 16.0f) - 0.5f;
 
-  // Scale normalized colour into N-bit colour, add dither offset,
-  // then floor the result (compress into N colour bands).
-  // This shifts the colour within the range of 1 colour band
+  // Scale normalized color into N-bit color, add dither offset,
+  // then floor the result (compress into N color bands).
+  // This shifts the color within the range of 1 color band
   // Clamp for sanity, even though GL should handle this anyway.
   color = clamp(
-    floor(color * numColourBands + ditherOffset),
+    floor(color * numColorBands + ditherOffset),
     0.0f,
     maxValue
   );

@@ -19,9 +19,10 @@ export class DirectionalLightNode extends SceneNode {
     this.color = options?.color ?? Color3.white();
     this.intensity = options?.intensity ?? 1;
 
-    // @TODO @DEBUG This should be based on camera distance or something.
-    if (scene.lighting.directionalLights.length < this.scene.engine.config.lighting.maxDirectionalLights) {
-      scene.lighting.directionalLights.push(this);
-    }
+    this.scene.lighting.registerLight(this);
+  }
+
+  public override onDestroyed(): void {
+    this.scene.lighting.deregisterLight(this);
   }
 }

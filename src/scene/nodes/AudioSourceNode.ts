@@ -103,6 +103,8 @@ export class AudioSourceNode extends SceneNode {
   }
 
   public playClip(audioClip: AudioClip, options?: PlayClipOptions): void {
+    if (!this.enabled) return;
+
     /* Parameter defaults */
     const priority = options?.priority ?? 0;
     const speed = options?.speed ?? 1;
@@ -207,6 +209,15 @@ export class AudioSourceNode extends SceneNode {
       this.spatialVolumeNode.gain.value = gain;
     }
   }
+
+  public override onDestroyed(): void {
+    this.stopPlaying();
+  }
+
+  public override onDisabled(): void {
+    this.stopPlaying();
+  }
+
 
   private get audioSystem(): IAudioSystem {
     return this.scene.engine.audioSystem;

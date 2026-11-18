@@ -20,6 +20,9 @@
     "url": "git+https://github.com/peabnuts123/lopoly.git"
   },
   "type": "module",
+  "main": "./index.js",
+  "module": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "build": "tsx scripts/build.ts",
     "publish": "tsx scripts/publish.ts",

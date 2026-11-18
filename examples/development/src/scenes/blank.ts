@@ -25,7 +25,7 @@ export abstract class Game {
     const engine = new Engine(canvas, fileSystem);
     const scene = new Scene(engine);
     scene.lighting.ambientColor = new Color3(30, 30, 30);
-    scene.clearColour = Color3.black();
+    scene.clearColor = Color3.black();
 
     const runLoopHooks: Array<(dt: number, time: number) => void> = [];
 
@@ -36,7 +36,7 @@ export abstract class Game {
     }
 
     /* Camera */
-    const camera = new CameraNode(scene, 'camera', 70, canvas.width / canvas.height);
+    const camera = new CameraNode(scene, 'camera', 70);
     camera.position = Vector3.one().scaleSelf(3);
     camera.pointAt(Vector3.zero());
 
@@ -55,11 +55,11 @@ export abstract class Game {
     });
 
     /* Run */
-    engine.run((dt, time, stop) => {
+    engine.run((dt, time) => {
       runLoopHooks.forEach((hook) => hook(dt, time));
 
       if (time > MaxRuntimeSeconds) {
-        stop();
+        engine.stop();
       }
     });
   }

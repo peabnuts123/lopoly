@@ -1,11 +1,11 @@
-import  { Matrix4 } from "@lopoly/engine/math/Matrix4";
-import  { Vector3 } from "@lopoly/engine/math/Vector3";
-import  { Transform } from "@lopoly/engine/transform/Transform";
-import  type { Rotation } from "@lopoly/engine/transform/Rotation";
-import  { Computed } from "@lopoly/engine/util/Computed";
-import  type { ModelPartDefinition, TransformDefinition } from "@lopoly/engine/loaders/definitions/model";
-import  type { DrawTask, IEngine } from "@lopoly/engine/Engine";
-import  { MaterialInstance } from "@lopoly/engine/materials/MaterialInstance";
+import { Matrix4 } from "@lopoly/engine/math/Matrix4";
+import { Vector3 } from "@lopoly/engine/math/Vector3";
+import { Transform } from "@lopoly/engine/transform/Transform";
+import type { Rotation } from "@lopoly/engine/transform/Rotation";
+import { Computed } from "@lopoly/engine/util/Computed";
+import type { ModelPartDefinition, TransformDefinition } from "@lopoly/engine/loaders/definitions/model";
+import type { DrawTask, IEngine } from "@lopoly/engine/Engine";
+import { MaterialInstance } from "@lopoly/engine/materials/MaterialInstance";
 
 import { MeshSkin } from "./MeshSkin";
 import type { ModelMaterialOverrides } from "./ModelMaterialOverrides";

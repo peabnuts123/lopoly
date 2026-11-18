@@ -41,6 +41,8 @@ export class ModelNode extends DrawableSceneNode implements IWireframeDrawable {
   }
 
   public playAnimation(animationName: string, speed: number = 1): void {
+    if (!this.enabled) return;
+
     const animation = this.animationSource.animations.find((animation) => animation.name === animationName);
     if (!animation) {
       throw new Error(`Cannot play animation. No animation exists with name '${animationName}'`);

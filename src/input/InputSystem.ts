@@ -970,12 +970,11 @@ export class InputSystem implements IInputSystem {
   }
 
   private onPointerDown(e: PointerEvent): void {
-    // Only acknowledge `pointerdown` if the canvas is already focused.
-    // Otherwise we would prevent focusing the canvas initially (i.e. by clicking on it)
-    // This also means the first click is ignored i.e. focusing the canvas doesn't take an action
-    if (this.state.isCanvasFocused) {
-      e.preventDefault();
-
+    // Do not acknowledge `pointerdown` if the pointer is locked but the
+    // canvas has not received focus yet. Games that don't lock the pointer
+    // receive input normally, whereas games that have locked the pointer
+    // require focus before you can interact.
+    if (!this.state.isPointerLocked || this.state.isCanvasFocused) {
       if (!this.isPointerActuallyLocked) {
         // Capture pointer, for dragging outside of the canvas
         this.canvas.setPointerCapture(e.pointerId);
@@ -995,8 +994,6 @@ export class InputSystem implements IInputSystem {
     // This prevents some edge cases where e.g. clicking and dragging into the canvas
     // doesn't misfire a rogue `pointerup` event.
     if (this.state.isCanvasFocused) {
-      e.preventDefault();
-
       // If remove touch / stylus input, deactivate the cursor
       if (e.pointerType !== 'mouse') {
         this.state.pointer.x = undefined;
@@ -1012,7 +1009,6 @@ export class InputSystem implements IInputSystem {
 
   private onPointerMove(e: PointerEvent): void {
     /**
-     * @NOTE Tricky variable to name.
      * "Active" means we should be listening to pointer movements.
      * If the pointer is supposed to be locked (through `lockPointer()`)
      * and the pointer is actually locked then it is active.
@@ -1023,8 +1019,12 @@ export class InputSystem implements IInputSystem {
      * This feels intuitive on the page but is hard to think about
      * in the code here.
      */
-    const isPointerActive = !this.state.isPointerLocked || this.isPointerActuallyLocked;
-    if (this.state.isCanvasFocused && isPointerActive) {
+
+    // Only acknowledge `pointermove` in certain scenarios:
+    // - the game HAS NOT requested the pointer be locked
+    // - the game HAS requested the pointer be locked AND it is focused and actually locked
+    // This logic seems complicated in code but feels right on the page.
+    if (!this.state.isPointerLocked || (this.state.isCanvasFocused && this.isPointerActuallyLocked)) {
       const { canvas } = this;
       const pageToCanvasX = canvas.width / canvas.clientWidth;
       const pageToCanvasY = canvas.height / canvas.clientHeight;
@@ -1035,15 +1035,29 @@ export class InputSystem implements IInputSystem {
       this.state.pointer.xDelta = e.movementX * pageToCanvasX;
       this.state.pointer.yDelta = e.movementY * pageToCanvasY;
 
-      // Update mouse state from current buttons bit mask
-      // @NOTE Weird to do this in `pointermove` you might ask?
-      // Yeah, pretty weird. But you might be surprised to learn
-      // this is how the specification works.
-      // `pointerup` and `pointerdown` don't fire if you are already
-      // pressing another mouse button. The specification says
-      // that subsequent mouse pressed must generate `pointermove`
-      // events.
-      this.updateMouseState(e.buttons);
+      // @NOTE Don't update buttons until the canvas is focused.
+      // This ignores click events that were sourced off the canvas
+      // so e.g. clicking and dragging into the canvas won't fire as
+      // a click on the first frame.
+      // This still allows you to click something in the game without
+      // first focusing the canvas, because the buttons will be updated
+      // by `onPointerDown()`. The edge case here is if you drag a
+      // click into the canvas (e.g. holding right click), then
+      // click another mouse button (e.g. left click), the click
+      // will be ignored. There's little we can do about this.
+      // There are also other bugs we can't do much about anyway
+      // e.g. clicking a second mouse button without moving the mouse.
+      if (this.state.isCanvasFocused) {
+        // Update mouse state from current buttons bit mask
+        // @NOTE Weird to do this in `pointermove` you might ask?
+        // Yeah, pretty weird. But you might be surprised to learn
+        // this is how the specification works.
+        // `pointerup` and `pointerdown` don't fire if you are already
+        // pressing another mouse button. The specification says
+        // that subsequent mouse pressed must generate `pointermove`
+        // events.
+        this.updateMouseState(e.buttons);
+      }
     }
   }
 

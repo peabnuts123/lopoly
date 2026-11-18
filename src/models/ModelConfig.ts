@@ -1,5 +1,5 @@
-import  { Observable } from "@lopoly/engine/util/Observable";
-import  type { AxisAlignedBoundingBoxConstructorArgs } from "@lopoly/engine/collision/AxisAlignedBoundingBox";
+import { Observable } from "@lopoly/engine/util/Observable";
+import type { AxisAlignedBoundingBoxConstructorArgs } from "@lopoly/engine/collision/AxisAlignedBoundingBox";
 
 export interface ScaleBasedAABBApproximationPolicy {
   type: 'scaled';

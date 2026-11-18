@@ -1,9 +1,9 @@
-import  { type IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
-import  { type IReadonlyVector2 } from "@lopoly/engine/math/Vector2";
-import  type { IReadonlyColor4 } from "@lopoly/engine/math/Color4";
-import  { Computed } from "@lopoly/engine/util/Computed";
-import  { Optional, type Mutable } from "@lopoly/engine/util/types";
-import  { AxisAlignedBoundingBox, type IReadonlyAxisAlignedBoundingBox } from "@lopoly/engine/collision";
+import { type IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
+import { type IReadonlyVector2 } from "@lopoly/engine/math/Vector2";
+import type { IReadonlyColor4 } from "@lopoly/engine/math/Color4";
+import { Computed } from "@lopoly/engine/util/Computed";
+import { Optional, type Mutable } from "@lopoly/engine/util/types";
+import { AxisAlignedBoundingBox, type IReadonlyAxisAlignedBoundingBox } from "@lopoly/engine/collision";
 
 import type { ModelPart } from "../ModelPart";
 import type { ModelConfig } from "../ModelConfig";

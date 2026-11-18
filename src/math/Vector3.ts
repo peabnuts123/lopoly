@@ -233,8 +233,8 @@ export class Vector3 extends Observable implements IReadonlyVector3 {
   public dot(other: Vector3Like): number {
     /*
       @NOTE to self
-        (a·b) / a.lengthSqr = project b onto a
-        (a·b) / b.lengthSqr = project a onto b
+        a * ((a·b) / a.lengthSqr) = project b onto a
+        b * ((a·b) / b.lengthSqr) = project a onto b
      */
     return this.x * other.x + this.y * other.y + this.z * other.z;
   }

@@ -1,6 +1,6 @@
-import  type { IReadonlyVector3, Matrix4, Vector3Like } from "@lopoly/engine/math";
-import  { Vector3 } from "@lopoly/engine/math/Vector3";
-import  type { IWireframeDrawable, WireframeFaces } from "@lopoly/engine/util/DebugDraw";
+import type { IReadonlyVector3, Matrix4, Vector3Like } from "@lopoly/engine/math";
+import { Vector3 } from "@lopoly/engine/math/Vector3";
+import type { IWireframeDrawable, WireframeFaces } from "@lopoly/engine/util/DebugDraw";
 
 export interface AxisAlignedBoundingBoxConstructorArgs {
   xMin: number;

@@ -2,7 +2,7 @@ import type { DrawTask, IEngine } from "@lopoly/engine/Engine";
 import { Color3 } from "@lopoly/engine/math/Color3";
 
 import { SceneLighting } from "./SceneLighting";
-import type { SceneNode } from "./SceneNode";
+import type { ForEachChildArgs, SceneNode } from "./SceneNode";
 import { DrawableSceneNode } from "./DrawableSceneNode";
 import { CameraNode } from "./nodes/CameraNode";
 
@@ -14,30 +14,33 @@ export interface IScene {
   removeTopLevelNode(node: SceneNode): void;
   onUpdate(dt: number, time: number): void;
   draw(drawQueue: DrawTask[]): void;
-  forEachNodeInHierarchy(fn: (node: SceneNode) => void): void;
+  forEachNodeInHierarchy(fn: (node: SceneNode) => void, includeDisabled?: boolean): void;
+  registerCamera(camera: CameraNode): void;
+  deregisterCamera(camera: CameraNode): void;
+
 
   get activeCamera(): CameraNode | undefined;
-  set activeCamera(value: CameraNode | undefined);
   get engine(): IEngine;
   set engine(value: IEngine);
   get lighting(): SceneLighting;
   set lighting(value: SceneLighting);
-  get clearColour(): Color3;
-  set clearColour(value: Color3);
+  get clearColor(): Color3;
+  set clearColor(value: Color3);
 }
 
 export class Scene implements IScene {
-  public activeCamera: CameraNode | undefined;
+  private cameras: CameraNode[];
   public readonly engine: IEngine;
   private topLevelNodes: SceneNode[];
   public readonly lighting: SceneLighting;
-  public clearColour: Color3;
+  public clearColor: Color3;
 
   public constructor(engine: IEngine) {
     this.engine = engine;
     this.topLevelNodes = [];
-    this.lighting = new SceneLighting();
-    this.clearColour = DefaultClearColor.clone();
+    this.cameras = [];
+    this.lighting = new SceneLighting(engine);
+    this.clearColor = DefaultClearColor.clone();
 
     if (engine.activeScene === undefined) {
       engine.loadScene(this);
@@ -78,10 +81,39 @@ export class Scene implements IScene {
     });
   }
 
-  public forEachNodeInHierarchy(fn: (node: SceneNode) => void): void {
-    for (const node of this.topLevelNodes) {
-      fn(node);
-      node.forEachChild(fn, true);
+  public registerCamera(camera: CameraNode): void {
+    // @NOTE Insert at the start of the collection.
+    // Newer camera always takes priority.
+    this.cameras.unshift(camera);
+  }
+
+  public deregisterCamera(camera: CameraNode): void {
+    const index = this.cameras.indexOf(camera);
+    if (index === -1) {
+      console.error(`[${Scene.name}] (${this.deregisterCamera.name}) Failed to deregister camera - it was not in the list of registered cameras`);
+      return;
     }
+
+    this.cameras.splice(index, 1);
+  }
+
+  /** Re-usable args instances to call `forEachChild()` without allocating */
+  private readonly tmp_forEachNodeInHierarchyArgs_includeDisabled: ForEachChildArgs = { recursive: true, includeDisabled: true };
+  private readonly tmp_forEachNodeInHierarchyArgs_excludeDisabled: ForEachChildArgs = { recursive: true, includeDisabled: false };
+  public forEachNodeInHierarchy(fn: (node: SceneNode) => void, includeDisabled: boolean = false): void {
+    for (const node of this.topLevelNodes) {
+      if (node.enabled || includeDisabled) {
+        fn(node);
+        node.forEachChild(fn, includeDisabled ? this.tmp_forEachNodeInHierarchyArgs_includeDisabled : this.tmp_forEachNodeInHierarchyArgs_excludeDisabled);
+      }
+    }
+  }
+
+  public get activeCamera(): CameraNode | undefined {
+    for (const camera of this.cameras) {
+      if (camera.enabled) return camera;
+    }
+
+    return undefined;
   }
 }

@@ -1,4 +1,4 @@
-import  type { Matrix4 } from "@lopoly/engine/math/Matrix4";
+import type { Matrix4 } from "@lopoly/engine/math/Matrix4";
 import type { ModelPart } from "./ModelPart";
 
 export class MeshSkin {

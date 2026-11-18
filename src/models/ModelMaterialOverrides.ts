@@ -94,6 +94,12 @@ export class ModelMaterialOverrides extends Observable {
   private reconcileComputedMaterialInstanceDependencies(materialName: string): void {
     const computedMaterialInstance = this.getComputedMaterialInstance(materialName);
     computedMaterialInstance.removeAllDependencies();
+
+    const defaultMaterial = this.getDefaultMaterial(materialName);
+    if (defaultMaterial) {
+      computedMaterialInstance.addDependency(defaultMaterial);
+    }
+
     const dependencies = this.getAllDependencies();
     for (const dependency of dependencies) {
       const override = dependency.overrides.get(materialName);
@@ -135,6 +141,7 @@ export class ModelMaterialOverrides extends Observable {
       });
 
       this.computedMaterialInstances.set(materialName, materialInstance);
+      this.reconcileComputedMaterialInstanceDependencies(materialName);
 
       return materialInstance;
     }

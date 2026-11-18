@@ -1,4 +1,4 @@
-import  type { TypedArray } from '@lopoly/engine/util/types';
+import type { TypedArray } from '@lopoly/engine/util/types';
 
 import { Observable } from '@lopoly/engine/util/Observable';
 import { CannotInvertMatrixError } from "./Matrix3";
@@ -215,6 +215,33 @@ export class Matrix4 extends Observable {
   }
   public transformNormal(normal: Vector3): Vector3 {
     return this.transformNormalInPlace(normal.clone());
+  }
+
+  /**
+   * Calculate the determinant of the matrix.
+   * For affine transforms, a negative determinant indicates a mirrored orientation.
+   * A zero determinant means the matrix cannot be inverted.
+   */
+  public determinant(): number {
+    const a00 = this.m00, a10 = this.m10, a20 = this.m20, a30 = this.m30,
+      a01 = this.m01, a11 = this.m11, a21 = this.m21, a31 = this.m31,
+      a02 = this.m02, a12 = this.m12, a22 = this.m22, a32 = this.m32,
+      a03 = this.m03, a13 = this.m13, a23 = this.m23, a33 = this.m33;
+
+    const b00 = a00 * a11 - a10 * a01;
+    const b01 = a00 * a21 - a20 * a01;
+    const b02 = a00 * a31 - a30 * a01;
+    const b03 = a10 * a21 - a20 * a11;
+    const b04 = a10 * a31 - a30 * a11;
+    const b05 = a20 * a31 - a30 * a21;
+    const b06 = a02 * a13 - a12 * a03;
+    const b07 = a02 * a23 - a22 * a03;
+    const b08 = a02 * a33 - a32 * a03;
+    const b09 = a12 * a23 - a22 * a13;
+    const b10 = a12 * a33 - a32 * a13;
+    const b11 = a22 * a33 - a32 * a23;
+
+    return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
   }
 
   public invertSelf(): this {

@@ -1,8 +1,8 @@
 import { type IAudioContext, AudioContext, DynamicsCompressorNode, GainNode, type IAudioNode } from 'standardized-audio-context';
 
-import  { Vector3 } from "@lopoly/engine/math/Vector3";
-import  type { AudioSourceNode } from "@lopoly/engine/scene/nodes";
-import  type { IEngine } from "@lopoly/engine/Engine";
+import { Vector3 } from "@lopoly/engine/math/Vector3";
+import type { AudioSourceNode } from "@lopoly/engine/scene/nodes";
+import type { IEngine } from "@lopoly/engine/Engine";
 
 const Up = Vector3.up();
 const Forward = Vector3.forward();

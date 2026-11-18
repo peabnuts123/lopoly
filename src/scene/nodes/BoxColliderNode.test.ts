@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import  { Vector3 } from '@lopoly/engine/math/Vector3';
+import { Vector3 } from '@lopoly/engine/math/Vector3';
 import { createMockScene } from '@test/util';
 
 import { BoxColliderNode } from './BoxColliderNode';

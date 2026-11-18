@@ -1,9 +1,9 @@
-import  { inverseLerp, lerp } from "@lopoly/engine/math/util";
-import  { Vector3 } from "@lopoly/engine/math/Vector3";
-import  { Quaternion } from "@lopoly/engine/math/Quaternion";
-import  { Vector2 } from "@lopoly/engine/math/Vector2";
-import  type { AnimationChannelDefinition, AnimationChannelTargetPath, AnimationChannelValues, AnimationSamplerInterpolation, AnimationTypeValue } from "@lopoly/engine/loaders/definitions";
-import  type { Model, ModelPart } from "@lopoly/engine/models";
+import { inverseLerp, lerp } from "@lopoly/engine/math/util";
+import { Vector3 } from "@lopoly/engine/math/Vector3";
+import { Quaternion } from "@lopoly/engine/math/Quaternion";
+import { Vector2 } from "@lopoly/engine/math/Vector2";
+import type { AnimationChannelDefinition, AnimationChannelTargetPath, AnimationChannelValues, AnimationSamplerInterpolation, AnimationTypeValue } from "@lopoly/engine/loaders/definitions";
+import type { Model, ModelPart } from "@lopoly/engine/models";
 
 // @TODO Could have subclasses for Translation, Rotation, Scale
 export class AnimationChannel {

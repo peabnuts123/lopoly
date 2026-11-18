@@ -62,6 +62,7 @@ for (const shaderFile of shaderFiles) {
 console.log(`Rewriting import aliases...`);
 await replaceTscAliasPaths({
   configFile: TsConfigPath,
+  resolveFullPaths: true,
 });
 
 console.log(`Finished processing successfully.`);

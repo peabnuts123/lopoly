@@ -1,7 +1,7 @@
-import  type { ArrayElementType } from "@lopoly/engine/util/types";
-import  type { Vector3 } from "@lopoly/engine/math/Vector3";
-import  type { Vector2 } from "@lopoly/engine/math/Vector2";
-import  type { Quaternion } from "@lopoly/engine/math/Quaternion";
+import type { ArrayElementType } from "@lopoly/engine/util/types";
+import type { Vector3 } from "@lopoly/engine/math/Vector3";
+import type { Vector2 } from "@lopoly/engine/math/Vector2";
+import type { Quaternion } from "@lopoly/engine/math/Quaternion";
 
 export type AnimationSamplerInterpolation = 'LINEAR' | 'STEP' | 'CUBICSPLINE';
 export type AnimationChannelTargetPath = 'translation' | 'rotation' | 'scale';

@@ -10,6 +10,75 @@ import { Quaternion } from './Quaternion';
  */
 
 describe(Matrix4.name, () => {
+  describe("determinant()", () => {
+    test("Identity matrix has determinant 1", () => {
+      // Setup
+      const matrix = Matrix4.identity();
+
+      // Test
+      const determinant = matrix.determinant();
+
+      // Assert
+      expect(determinant).toBe(1);
+    });
+    test("One negative scale axis produces a negative determinant", () => {
+      // Setup
+      const matrix = Matrix4.fromRotationTranslationScale(
+        Quaternion.identity(),
+        Vector3.zero(),
+        new Vector3(-2, 3, 4),
+      );
+
+      // Test
+      const determinantSign = Math.sign(matrix.determinant());
+
+      // Assert
+      expect(determinantSign).toBe(-1);
+    });
+    test("Two negative scale axes produce a positive determinant", () => {
+      // Setup
+      const matrix = Matrix4.fromRotationTranslationScale(
+        Quaternion.identity(),
+        Vector3.zero(),
+        new Vector3(-2, -3, 4),
+      );
+
+      // Test
+      const determinantSign = Math.sign(matrix.determinant());
+
+      // Assert
+      expect(determinantSign).toBe(1);
+    });
+    test("Three negative scale axes produce a negative determinant", () => {
+      // Setup
+      const matrix = Matrix4.fromRotationTranslationScale(
+        Quaternion.identity(),
+        Vector3.zero(),
+        new Vector3(-1, -1, -1),
+      );
+
+      // Test
+      const determinantSign = Math.sign(matrix.determinant());
+
+      // Assert
+      expect(determinantSign).toBe(-1);
+    });
+    test("A zero scale axis produces determinant 0", () => {
+      // Setup
+      const matrix = Matrix4.fromRotationTranslationScale(
+        Quaternion.identity(),
+        Vector3.zero(),
+        new Vector3(2, 0, 4),
+      );
+
+      // Test
+      const determinant = matrix.determinant();
+
+      // Assert
+      expect(determinant).toBe(0);
+    });
+  });
+
   describe("Observability", () => {
     test("Calling transformPointInPlace() does not fire onChange()", () => {
       // Setup
@@ -97,6 +166,21 @@ describe(Matrix4.name, () => {
 
       // Test
       matrix.transformNormal(Vector3.forward());
+
+      // Assert
+      expect(timesOnChangeCalled).toBe(0);
+    });
+    test("Calling determinant() does not fire onChange()", () => {
+      // Setup
+      const matrix = Matrix4.identity();
+
+      let timesOnChangeCalled = 0;
+      matrix.onChange(() => {
+        timesOnChangeCalled++;
+      });
+
+      // Test
+      matrix.determinant();
 
       // Assert
       expect(timesOnChangeCalled).toBe(0);

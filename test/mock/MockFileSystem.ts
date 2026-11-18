@@ -1,4 +1,4 @@
-import  { type IFileSystem, VirtualFile } from "@lopoly/engine/filesystem";
+import { type IFileSystem, VirtualFile } from "@lopoly/engine/filesystem";
 
 export class MockFileSystem implements IFileSystem {
   private files: Map<string, Uint8Array<ArrayBuffer>> = new Map();

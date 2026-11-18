@@ -382,7 +382,7 @@ export class ObjLoader {
 
     // Special "for fun" flag `multiplyDiffuseMap` seems to specify whether (if
     // a diffuse texture is defined) whether it should be blended with the
-    // diffuse colour. We HAVE to honour this because the .obj library
+    // diffuse color. We HAVE to honour this because the .obj library
     // will default diffuse color black if not specified.
     if (materialObj.diffuseMap && materialObj.multiplyDiffuseMap === false) {
       materialDefinition.diffuseColor = Color4.white().withA(materialObj.opacity * 0xFF);

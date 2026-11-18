@@ -2,8 +2,9 @@ import './style.css';
 
 import { Game } from './scenes/testfield';
 // import { Game } from './scenes/character';
+// import { Game } from './scenes/gems';
 
-import  { DebugModule } from '@lopoly/engine/util/DebugModule';
+import { DebugModule } from '@lopoly/engine/util/DebugModule';
 
 try {
   DebugModule.register();

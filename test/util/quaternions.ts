@@ -1,4 +1,4 @@
-import  { EulerVector3, Quaternion } from "@lopoly/engine/math";
+import { EulerVector3, Quaternion } from "@lopoly/engine/math";
 
 /**
  * Quaternions can have somewhat obtuse values. This is a list of

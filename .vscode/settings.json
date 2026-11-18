@@ -3,5 +3,9 @@
     ".",
     "examples/development",
     "examples/rat-game",
-  ]
+  ],
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.test.ts"
+  },
 }

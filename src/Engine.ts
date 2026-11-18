@@ -15,6 +15,7 @@ import { InputSystem, type IInputSystem } from "./input";
 import { DebugDraw, type IDebugDraw } from "./util/DebugDraw";
 
 export type DrawTask = OpaqueDrawTask | TransparentDrawTask;
+export type StopFn = () => void;
 
 export interface DrawTaskCommon {
   renderLayer: number;
@@ -75,12 +76,14 @@ export const DefaultEngineConfig = {
   },
 } satisfies EngineConfig;
 
-export type OnUpdateFn = (dt: number, time: number, stop: () => void) => void
+export type OnUpdateFn = (dt: number, time: number) => void
 
 export interface IEngine {
   loadScene(scene: IScene): void;
   run(onUpdate: OnUpdateFn): void;
+  stop(): void;
 
+  get canvas(): HTMLCanvasElement;
   get config(): EngineConfig;
   get gl(): WebGL2RenderingContext;
   get fileSystem(): IFileSystem;
@@ -92,7 +95,7 @@ export interface IEngine {
 }
 
 export class Engine implements IEngine {
-  private readonly canvas: HTMLCanvasElement;
+  public readonly canvas: HTMLCanvasElement;
   public readonly config: EngineConfig;
   public readonly gl: WebGL2RenderingContext;
   public readonly fileSystem: IFileSystem;
@@ -104,11 +107,11 @@ export class Engine implements IEngine {
   private _normalTmp: Matrix3 = new Matrix3();
 
   private _activeScene: IScene | undefined;
+  private isRunning: boolean = false;
   private cameraUbo: CameraUbo;
   private lightingUbo: LightingUbo;
   private fpsLimit: number | undefined;
 
-  // @TODO Expose canvas aspect ratio and also somehow a method of listening to it
   public constructor(canvas: HTMLCanvasElement, fileSystem: IFileSystem, options?: DeepPartial<EngineConfig>) {
     this.canvas = canvas;
     this.fileSystem = fileSystem;
@@ -169,8 +172,13 @@ export class Engine implements IEngine {
   }
 
   public run(onUpdate?: OnUpdateFn): void {
+    if (this.isRunning) {
+      console.warn(`[${Engine.name}] (${this.run.name}) Cannot run - engine is already running`);
+      return;
+    }
+
     let lastFrameTime: DOMHighResTimeStamp | null = null;
-    let isStopped = false;
+    this.isRunning = true;
 
     // Count number of frames drawn per second
     const fps = new RateCounter('FPS');
@@ -229,7 +237,7 @@ export class Engine implements IEngine {
       this.activeScene?.onUpdate(dt, timestamp / 1000);
 
       /* Update external (user-controlled) state second */
-      onUpdate?.(dt, timestamp / 1000, () => isStopped = true);
+      onUpdate?.(dt, timestamp / 1000);
 
       /* Update global UBOs */
       if (this.activeScene) {
@@ -239,7 +247,7 @@ export class Engine implements IEngine {
         }
 
         /* Lighting UBO */
-        this.activeScene.lighting.bindToUbo(this.gl, this.lightingUbo, this.config.lighting);
+        this.activeScene.lighting.bindToUbo(this.gl, this.lightingUbo);
       }
 
       /* Audio system */
@@ -263,7 +271,7 @@ export class Engine implements IEngine {
       debug_resourceCounters.mesh.shared.count(resources.mesh.shared);
       debug_resourceCounters.drawCalls.count(resources.drawCalls);
 
-      if (!isStopped) {
+      if (this.isRunning) {
         requestAnimationFrame(tick);
       } else {
         fps.stop();
@@ -276,6 +284,10 @@ export class Engine implements IEngine {
     requestAnimationFrame(tick);
   }
 
+  public stop(): void {
+    this.isRunning = false;
+  }
+
   private tmp_draw_color4Buffer = new Float32Array(4);
   private tmp_draw_mat4Buffer = new Float32Array(16);
   private tmp_draw_mat3Buffer = new Float32Array(9);
@@ -283,14 +295,14 @@ export class Engine implements IEngine {
   private draw(drawQueue: DrawTask[]) {
     const { gl } = this;
 
-    const clearColor = this.activeScene?.clearColour ?? DefaultClearColor;
+    const clearColor = this.activeScene?.clearColor ?? DefaultClearColor;
     gl.clearColor(clearColor.r / 0xFF, clearColor.g / 0xFF, clearColor.b / 0xFF, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
     // gl.cullFace(gl.BACK);
     // gl.frontFace(gl.CCW);
-    // gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    gl.viewport(0, 0, this.canvas.width, this.canvas.height);
 
     let currentShaderVariant: ShaderVariant = undefined!;
     let currentMaterial: MaterialInstance = undefined!;
@@ -440,6 +452,14 @@ export class Engine implements IEngine {
       if (worldMatrixUniform) {
         task.uniforms.worldMatrix.writeTo(this.tmp_draw_mat4Buffer);
         gl.uniformMatrix4fv(worldMatrixUniform, false, this.tmp_draw_mat4Buffer);
+
+        // @NOTE Flip winding order if model is inverted due to scale
+        const worldMatrixDeterminant = task.uniforms.worldMatrix.determinant();
+        if (worldMatrixDeterminant < 0) {
+          gl.frontFace(gl.CW);
+        } else {
+          gl.frontFace(gl.CCW);
+        }
       }
 
       // Lighting uniform

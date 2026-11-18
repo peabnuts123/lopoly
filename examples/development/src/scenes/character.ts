@@ -29,7 +29,7 @@ export abstract class Game {
     const { inputSystem: input } = engine;
     const scene = new Scene(engine);
     scene.lighting.ambientColor = new Color3(110, 100, 90);
-    scene.clearColour = new Color3(46, 29, 16);
+    scene.clearColor = new Color3(46, 29, 16);
 
     const runLoopHooks: Array<(dt: number) => void> = [];
 
@@ -127,7 +127,7 @@ export abstract class Game {
     const cameraPivot = new ObjectNode(scene, 'camera_pivot', cameraParent);
     cameraPivot.position.z = 0.7;
     cameraPivot.rotation.euler = new Vector3(35, 0, 0);
-    const camera = new CameraNode(scene, 'camera', 60, canvas.width / canvas.height, cameraPivot);
+    const camera = new CameraNode(scene, 'camera', 60, cameraPivot);
 
     let cameraDistance = 3;
     const repositionCamera = (): void => {
@@ -230,11 +230,11 @@ export abstract class Game {
     });
 
     /* Run */
-    engine.run((dt, time, stop) => {
+    engine.run((dt, time) => {
       runLoopHooks.forEach((hook) => hook(dt));
 
       if (time > MaxRuntimeSeconds) {
-        stop();
+        engine.stop();
       }
     });
   }

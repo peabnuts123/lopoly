@@ -1,8 +1,11 @@
 import { Vector3, type IReadonlyVector3 } from "@lopoly/engine/math/Vector3";
+import { Matrix4 } from "@lopoly/engine/math/Matrix4";
+import { CannotInvertMatrixError } from "@lopoly/engine/math/Matrix3";
 import type { Enum } from "@lopoly/engine/util/types";
 import type { IReadonlyAxisAlignedBoundingBox } from "@lopoly/engine/collision/AxisAlignedBoundingBox";
 import type { Triangle } from "@lopoly/engine/models/geometry";
 import { AxisAlignedBoundingBox } from "@lopoly/engine/collision/AxisAlignedBoundingBox";
+import { BoxColliderNode } from "@lopoly/engine/scene/nodes/BoxColliderNode";
 import { ModelNode } from "@lopoly/engine/scene/nodes/ModelNode";
 import type { IScene } from "@lopoly/engine/scene/Scene";
 
@@ -125,11 +128,11 @@ export abstract class RayCast {
   }
 
   /**
-   * Test for intersection between a ray and an {@linkcode AxisAlignedBoundingBox} (AABB).
+   * Test for intersection between a ray and an {@link AxisAlignedBoundingBox} (AABB).
    * @param rayOrigin Origin of the ray being cast.
    * @param rayDirection Direction of the ray being cast. Does not need to be normalized.
-   * @param aabb {@linkcode AxisAlignedBoundingBox} to cast against.
-   * @returns Intersection point expressed as a scalar of {@linkcode rayDirection}, or `undefined` if no intersection.
+   * @param aabb {@link AxisAlignedBoundingBox} to cast against.
+   * @returns Intersection point expressed as a scalar of {@link rayDirection}, or `undefined` if no intersection.
    */
   public static intersectAABB(rayOrigin: IReadonlyVector3, rayDirection: IReadonlyVector3, aabb: IReadonlyAxisAlignedBoundingBox): number | undefined {
     /* Min */
@@ -167,6 +170,51 @@ export abstract class RayCast {
       // Ray does not intersect AABB
       return undefined;
     }
+  }
+
+  private static readonly tmp_intersectBoxCollider_inverseWorldMatrix = Matrix4.identity();
+  private static readonly tmp_intersectBoxCollider_rayOrigin = Vector3.zero();
+  private static readonly tmp_intersectBoxCollider_rayDirection = Vector3.zero();
+  private static readonly tmp_intersectBoxCollider_aabb = AxisAlignedBoundingBox.zero();
+  /**
+   * Test for intersection between a ray and a {@link BoxColliderNode}.
+   *
+   * NOTE: Will return `undefined` if the collider node's transform hierarchy has a scale of 0 on one or more axes (separate
+   * from the collider itself having a dimension of 0, which IS supported).
+   * @param rayOrigin Origin of the ray being cast.
+   * @param rayDirection Direction of the ray being cast. Does not need to be normalized.
+   * @param collider {@link BoxColliderNode} to cast against.
+   * @returns Intersection point expressed as a scalar of {@link rayDirection}, or `undefined` if no intersection.
+   */
+  public static intersectBoxCollider(rayOrigin: IReadonlyVector3, rayDirection: IReadonlyVector3, collider: BoxColliderNode): number | undefined {
+    const inverseWorldMatrix = RayCast.tmp_intersectBoxCollider_inverseWorldMatrix.setValue(collider.worldMatrix);
+    try {
+      inverseWorldMatrix.invertSelf();
+    } catch (error) {
+      // Collider transform has determinant of 0 - one or more axes have scale = 0
+      // @NOTE This is separate from the collider itself having `x=0`
+      if (error instanceof CannotInvertMatrixError) return undefined;
+      throw error;
+    }
+
+    // Transform ray into coordinates local to the collider i.e. make the collider axis-aligned
+    const localRayOrigin = inverseWorldMatrix.transformPointInPlace(
+      RayCast.tmp_intersectBoxCollider_rayOrigin.setValue(rayOrigin),
+    );
+    const localRayDirection = inverseWorldMatrix.transformDirectionInPlace(
+      RayCast.tmp_intersectBoxCollider_rayDirection.setValue(rayDirection),
+    );
+
+    // Convert collider into AABB
+    const aabb = RayCast.tmp_intersectBoxCollider_aabb;
+    aabb.xMin = -collider.x / 2;
+    aabb.xMax = collider.x / 2;
+    aabb.yMin = -collider.y / 2;
+    aabb.yMax = collider.y / 2;
+    aabb.zMin = -collider.z / 2;
+    aabb.zMax = collider.z / 2;
+
+    return RayCast.intersectAABB(localRayOrigin, localRayDirection, aabb);
   }
 
   private static readonly tmp_intersectTriangle: Vector3[] = [Vector3.zero(), Vector3.zero(), Vector3.zero(), Vector3.zero()];
